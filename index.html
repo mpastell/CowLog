@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CowLog - Code behaviors from Video</title>
+
+    
+    <meta name="description" content="CowLog - Behavior coding software" />
+    <meta name="keywords" content="CowLog, Ethology" />
+    <meta name="author" content="Matti Pastell" />	
+
+    <link rel="stylesheet" type="text/css" href="cowlog.css"
+	  media="screen"/> 
+    <link rel="stylesheet" type="text/css"
+	  href="css/custom-theme/jquery-ui-1.8.21.custom.css" media="screen"/>
+
+
+
+    <!-- <link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui.css" -->
+    <!--       media="screen"/> -->
+    
+    
+    <link rel="icon" href="../almod.png" /> 
+    
+    
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    
+    <script type="text/javascript"
+	    src="js/jquery.hotkeys.js"></script>
+    <script type="text/javascript"  
+	    src="js/jquery-ui-timepicker-addon.js"></script>
+    
+    <script type="text/javascript" src="js/vlc.js"></script>
+    <script type="text/javascript" src="js/cowlog.shared.js"></script>
+    <script type="text/javascript" src="js/cowlog.js"></script>
+
+  </head>
+
+  <body>
+    <div id="header"><h1 class="header">CowLog 2.11</h1>
+    </div>
+
+    <div id = "prefnav">
+      <!-- <a href="javascript:toggleBlock('playerprefs')">Preferences</a>
+	-->
+      <ul id="navbar">
+	<li><a itle="Manage your projects">Project settings</a>
+	  <ul>
+	    <li><HR/></li>
+	    <li><a href="#" id="openProject">Load project</a></li>
+	    <li><a href="#" id="newProject">New project</a></li>
+	    <li><HR/></li>
+	  </ul>
+	</li>
+	
+	<li><a href="#" id="showHelp" title="Show help">Help</a></li>
+	
+      </ul>
+      <div style="clear:both"></div>
+      
+    </div>
+    
+    <div id="content">
+
+      
+      <div id="buttoncontainer">
+	<!-- <a href="#" id="newSubject"> Start coding</a></BR> -->
+	<button id="newSubject" class="topButton">New subject</button>
+	<button id="endSubject" class="topButton" onclick="endCoding()">End coding</button><BR/>
+	<button onclick="saveData()" title="Save results to a file" class="topButton">
+	  &#10004; Save results</button>
+	<button onclick="openData()" title="Open results in new
+	window" class="topButton">Open results</button><BR/>
+	
+	<input type="text" size="3" id="speed" 
+	       title="Video playback rate as number" class="topButton">
+	 <button onclick="setSpeed()" class="topButton">Set speed</button><BR/>
+ <!--	<input type="text" size="3" id="size"
+		title="Set video size compared to actual resolution">
+	     <button onclick="setSize()">Resize x
+	     original</button><BR/> -->
+
+ <div id="timeIndicator" style="text-align :
+ center; margin-top:10px"><span id="currentTime">0</span> / <span id="videoLength">0 s</div>
+ <div id="timeSlider"></div>
+	    
+	    <!-- <div id="col1" class="buttons"> -->
+	    
+	    <table>
+	      <tr class="controlButtonRow">
+		<td><button onclick="videoPlay()" class =
+			    "codeButton">&#X25B6;</button></td>
+		<td><button onclick="videoStop()" class = "codeButton">&FilledSmallSquare;</button></td>
+		<td><button onclick="videoPause()" class =
+			    "codeButton" title="pause">&#10073; &#10073;</button></td>
+	      </tr>
+	      <tr class="controlButtonRow">
+		<td><button onclick="videoBack()" class ="codeButton">&lt;Seek</button></td>
+		<td><input type="text" size="4"/ id="seekInput" value="5" title="Enter jump duration is seconds"></td>
+		<td><button onclick="videoFwd()" class = "codeButton">Seek &gt;</button></td>
+	      </tr>
+	      
+	      
+	      <tr id="buttonrow">
+		<td>
+		  <button onclick="code(this)">1</button><BR/>
+		  <button onclick="code(this)">2</button><BR/>
+		  <button onclick="code(this)">3</button><BR/>
+		  <button onclick="code(this)">4</button><BR/>
+		  <button onclick="code(this)">5</button><BR/>
+		  <button onclick="code(this)">6</button><BR/>
+		  <button onclick="code(this)">7</button><BR/>
+		  <button onclick="code(this)">8</button><BR/>
+		  <button onclick="code(this)">9</button><BR/>
+		  <button onclick="code(this)">10</button><BR/>
+		</td>
+		
+		<!-- </div> -->
+
+		<!-- <div id="col2" class = "buttons"> -->
+		<td>
+		  <button onclick="code(this)">11</button><BR/>
+		  <button onclick="code(this)">12</button><BR/>
+		  <button onclick="code(this)">13</button><BR/>
+		  <button onclick="code(this)">14</button><BR/>
+		  <button onclick="code(this)">15</button><BR/>
+		  <button onclick="code(this)">16</button><BR/>
+		  <button onclick="code(this)">17</button><BR/>
+		  <button onclick="code(this)">18</button><BR/>
+		  <button onclick="code(this)">19</button><BR/>
+		  <button onclick="code(this)">20</button><BR/>
+		</td>
+		<!-- </div> -->
+
+
+		<!-- <div id="col3" class = "buttons"> -->
+		<td>
+
+		  <button onclick="code(this)">21</button><BR/>
+		  <button onclick="code(this)">22</button><BR/>
+		  <button onclick="code(this)">23</button><BR/>
+		  <button onclick="code(this)">24</button><BR/>
+		  <button onclick="code(this)">25</button><BR/>
+		  <button onclick="code(this)">26</button><BR/>
+		  <button onclick="code(this)">27</button><BR/>
+		  <button onclick="code(this)">28</button><BR/>
+		  <button onclick="code(this)">29</button><BR/>
+		  <button onclick="code(this)">30</button><BR/>
+		</td>
+	      </tr>
+
+	      <tr>
+		<td></td>
+		<td><button onclick="undo()" class="controlButton
+						    codeButton">Undo</button></td>
+	      </tr>
+	      <!-- </div> -->
+	    </table>
+
+	    <div id="currentCode"></div>
+      </div>
+      	
+      
+      <div id = "right" class="full">
+	<div id="videocontainer" class="full">
+	  
+	  
+	</div>
+
+      </div>
+      
+      <div id="blank"></div>
+    </div>
+    
+
+
+
+
+    <!-- The stuff for dialogs -->
+
+    <!-- New subject dialog -->
+    <div id="subjectprefs" class="prefs">
+      <p class ="helper">Type in the name of the subject that
+	you are coding and optionally date and time. These
+	fields are used in naming the transcript file and their
+	use is optional. Type in the time and date without delimiters.</p>
+      
+      <fieldset>
+	<label>Name:</label> 
+	<input type="text" id="subjectName" title="The name of the subject"/>
+	<label>Date and time:</label>
+	<input type="text" id="subjectDate" title="Coding date without delimiters"/>
+	<p> <label for="getVideo">Video file:</label><BR/>
+	  <input type="file" multiple="multiple" id="getVideo"
+		 accept="video/*" /></p>
+      </fieldset>
+      
+    </div>
+
+
+    <!-- Project preferences dialog -->	 
+    <div id="loadProject" class="prefs">
+      
+      <fieldset>
+      <p><select id="storedProjects">
+      </select></p>
+      
+      <p><button onclick = "loadSettings()"> Load
+	  project</button><p>
+	  
+	  <p><label>Load from file:</label>
+	    <input type="file" id="getSettings"
+		   accept="*.txt"/><p>
+      </fieldset>
+
+    </div>
+
+
+    <div id="projectprefs" class="prefs">
+
+      
+      <a href="#" class="toggleParagraph">Help</a>
+      <p class="helper">
+	You can define project settings
+	including behavioral codes and save the settings.
+	Settings are stored in
+	browsers <a href="https://developer.mozilla.org/en/DOM/Storage" target="_blank">localStorage</a>
+	for convinience, but that is not "safe" (they can
+	disappear if you clear the cache) so they should also
+	saved to a local file. You can also open a stored
+	project for editing using the &ldquo;Projects > Load
+	project&rdquo;.
+      </p>
+
+
+      <p><button onclick="clearSettings()">Create new</button>
+	<button onclick="enableSettings()">Edit settings</button></p>
+
+      
+      <fieldset>
+	<label>Project name:</label><input type="text" id="projName"/>
+	<label>Author:</label><input type="text" id="Author"/>
+	<label>E-mail:</label>
+	<input type="email" id="email"/>
+
+	<label>Choose videoplayer:</label>
+	<select id="player">
+	  <option value="html">Native HTLM5</option>
+	  <option value="vlc">VLC player</option>
+	</select>
+	
+	<label>Video directory: </label>
+	<input type="text" id="videoDir"
+	     title="Set the video directory as full path
+		    e.g c:\videos or /home/matti/videos.
+		    This is only required with VLC player" />
+      
+      <!-- Basic config without modifiers -->
+      <label>Number of behavior classes:</label>
+      <input type="text" id="nClasses">
+	
+	<label>Use modifiers:</label> <input type="checkbox" id="useModifiers"/>
+      </fieldset>
+	
+	<p><button onclick="classBoxes()">Add codes</button></p>
+
+
+	
+	<div id="classInputs">
+	</div>
+	
+	<div id="modifierInputs">
+	</div>
+	
+	<div id="keyInputs"></div>
+
+	
+	<div id="prefButtons">
+	</div>
+	
+	
+	<!-- 
+             Modifier related stuff
+             <span id="codelabel">N:o of codes in class 1:</span> <input type="text" id="classNo"></input>
+	     <button onclick="addCodeFields(1)">Add</button>
+	     <div id="addCodes">
+	       
+	     </div> -->
+    </div>
+
+    <!-- Help dialog -->
+    
+    <div id="help" class="prefs">
+      
+      <div id="helpToc"></div>
+      
+      <h3>About</h3>
+      <p>
+	This is the help of this online version of Cowlog
+	behavioral coding software. It should work with Firefox
+	and Chrome. However you need to start Chrome with the
+	"--allow-file-access-from-files" command line
+	option. You will also need to allow pop-up windows for
+	this site so that you can save the data.
+      </p>
+      
+      <p>
+	The program runs almost entirely in client side (in your
+	webbrowser). Server is only accessed to format the
+	results click the <span class="button">Save
+	  results</span> button and <span class="button">Save
+	  settings</span> button. No data is saved on the
+	server. If you wan't to avoid server calls entirely you
+	can use the <span class="button">Open results</span>
+	and <span class="button">Open settings</span> buttons
+	instead and save the data from opened browser
+	windows. You can also save the webpage to your computer
+	and use it offline (make sure you save the complete
+	page).
+      </p>
+
+      
+      <h3>Setting up the project</h3>
+
+      <p>
+	You can use choose between 2 video players:</p>
+	<ul>
+	  <li> 
+	    HTML5 native video tag. You can set different
+	    playback rates for this player only in
+	    Chrome. Supports <a href="http://www.w3schools.com/html5/html5_video.asp">limited
+	    </a> video formats, but it doesn't need any plugins.
+	  </li>
+	  <li>
+	    <a href="http://www.videolan.org/"
+	       target="_blank">VLC</a> player plugin which supports
+	    a lot more video formats, but requires you to
+	    install VLC plugin.
+	  </li>
+	</ul>
+
+
+      <p>
+	You can set the project properties from the "Project settings"-menu. You
+	can choose the video player, the number of behavioral
+	classes and behaviors and set the names of the
+	classes and set keyboard shortcuts for coding. </p>
+
+      <p>You can also choose to use modifiers, in which case the
+	video will pause when a behavior with modifiers is
+	selected. Modifier names are give as a comma separated
+	list to a text input box, they can be from any main
+	behavioral class.</p>
+
+
+      
+      <p>
+	You don't need to name the buttons if you just
+	want to use the numbers as your codes.
+      </p>
+
+      <h3>Coding and saving</h3>
+
+
+      <p>Click the <span class="button">New subject</span> button to
+	open a video from your harddrive and set subject name and the
+	date and time the video was filmed (these are not required,
+	but can be helpfull), set the subject properties and start
+	coding using the buttons. If you are using VLC player you need
+	to set the video directory manually.</p>
+      
+      <p>After you have finished click
+	the <span class="button">Save results</span>
+	or <span class="button">Save results</span> button and a
+	download or new window with the transciption should
+	appear. If it doesn't make sure you have disabled the
+	pop-up blocker</p>
+
+      <strong>The result format depends on the selected configuration.</strong>
+      
+      <p>
+	If there are no modifiers the result format has three columns:</p>
+	<ol>
+	  <li>Time. Seconds from beginning.</li>
+	  <li>Code. The behavioral code.</li>
+	  <li>Class. The class that the code belongs to.</li>
+	</ol>
+
+
+      <p>
+	If modifiers are used there are result format will be
+	slightly different: The first column will contain the
+	time and the following columns contains the behavioral codes
+	followed by potential modifiers.
+      </p>
+
+      <h3>Analysis</h3>
+      <p>There is no support for analysing the data from this
+	version yet. We have found out that almost every project
+	needs some specific work in doing the analysis and its
+	quite difficult to come up with good general analysis code
+	without significant input. However, I'll try to write some
+	analysis code for simple cases in the future.</p>
+      
+      <h3>Implementation</h3>
+      
+      The code behind this website is written in Javascript and
+      HTML uses the new HTML5 markup. HTML5 is an unfinished
+      standard and thus the page doesn't work in all
+      browsers. If you wan't to learn how to modify this page I
+      suggest you start
+      from <a href="http://www.w3schools.com/"
+	      target="_blank">w3schools</a>.
+      
+
+
+      <h3>Converting videos for suitable codecs:</h3>
+
+      <p>
+	You can use the following programs to convert video to HTML5 compatible format:      </p>
+
+	<ul>
+	  <li><a href="http://handbrake.fr/" target="_blank">Handbrake</a>
+	    convert to MP4 for Chrome.</li>
+	  <li><a href="http://www.mirovideoconverter.com/"
+		 target="_blank">MiroVideoConverter</a> 
+	    convert to MP4 (Chrome), and Ogg or VP8 for Chrome of Firefox.</li>
+	  <li><a href="http://v2v.cc/~j/ffmpeg2theora/"
+		 target="_blank">ffmpeg2theora</a> 
+	    convert to Ogg for Chrome or Firefox.</li>
+	</ul>
+
+
+
+      <h3>Citing CowLog</h3>
+      <p><strong>Citation:</strong> Hänninen, L. & Pastell, M. 2009. CowLog:
+	Open source software for coding behaviors from digital video. Behavior
+	Research Methods. 41(2), 472-476.</p>
+      
+      <h3>License</h3>
+      <div class="licence"><a rel="license"
+			      href="http://creativecommons.org/licenses/by-nc/3.0/">
+	  <img alt="Creative
+		    Commons License" style="border-width:0"
+	       src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png"
+	       /></a><br />
+	<span xmlns:dct="http://purl.org/dc/terms/"
+				 href="http://purl.org/dc/dcmitype/MovingImage" property="dct:title"
+				 rel="dct:type"><a href="http://cowlog.org">CowLog</a>
+	</span>
+	by <a xmlns:cc="http://creativecommons.org/ns#"
+	      href="http://mpastell.com/" property="cc:attributionName"
+	      rel="cc:attributionURL">Matti Pastell</a> is licensed under
+	a <a rel="license"
+	     href="http://creativecommons.org/licenses/by-nc/3.0/">Creative
+	  Commons Attribution-NonCommercial 3.0 Unported License</a>.</div>
+
+      <h3>More help</h3>
+
+      <p>Email me matti.pastell(a)helsinki.fi.</p>
+      
+      
+    </div>
+
+
+    <div id="startUp">
+      <h1>About CowLog</h1>
+      <HR/>
+
+      <p>
+	This <strong>Cowlog</strong> behavioral coding software. It
+	works with current versions of <strong>Firefox</strong>
+	and <strong>Chrome/Chromium</strong><sup>1</sup> browsers.
+	The applications runs in <strong>client side</strong> meaning
+	that it runs locally in your own computer after you have
+	opened the website and no videos are uploaded to the
+	server. The server is only used to format results when you
+	save data and that can also be avoided. See help for details.</p>
+
+      <p>The
+	program supports behavioral coding from multiple videos and
+	unlimited number of freely defined behavioral codes and classess. You can
+	also choose to use modifiers for behaviors.
+      </p>
+
+      <p>Define a new project from "Project setting" menu option to
+	define the behaviors and basic info about your project and after
+	that click "New subject" button to start coding. I also
+	recommend you read the short help before you start.
+      </p>
+
+      For more info about CowLog see: <a href="http://cowlog.org"
+					 target="_blank">http://cowlog.org</a>      
+
+      
+
+
+      <div class="footer">
+
+	<p><strong>Citation:</strong> Hänninen, L. & Pastell, M. 2009. CowLog:
+	  Open source software for coding behaviors from digital video. Behavior
+	  Research Methods. 41(2), 472-476.</p>
+
+	<p style="font-size:0.8em;"><sup>1</sup>You need to start Chrome with the
+	  "--allow-file-access-from-files" command line option in Windows.</p> 
+	
+	
+
+	<div class="license">
+	  <a rel="license"
+	     href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative
+									     Commons License" style="border-width:0"
+									src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png"
+									/></a><br /><span xmlns:dct="http://purl.org/dc/terms/"
+											  href="http://purl.org/dc/dcmitype/MovingImage" property="dct:title"
+											  rel="dct:type"><a href="http://cowlog.org">CowLog</a></span>
+	  by <a xmlns:cc="http://creativecommons.org/ns#"
+		href="http://mpastell.com/" property="cc:attributionName"
+		rel="cc:attributionURL">Matti Pastell</a> is licensed under
+	  a <a rel="license"
+	       href="http://creativecommons.org/licenses/by-nc/3.0/">Creative
+	    Commons Attribution-NonCommercial 3.0 Unported License</a>.<br />
+
+	</div>
+      </div>
+    </div>
+	
+
+<div id="notification" class="success">
+<!--  <h1>Note!</h1> -->
+  <p>Project saved succesfully.</p>
+</div>
+
+      
+
+  </body>
+</html>
