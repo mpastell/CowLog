@@ -4,16 +4,20 @@
 
 //Cow is container for global properties and data
 var cow = {};
+var ipc = require('ipc');
+var remote = require('remote');
+var dialog = remote.require('dialog');
 
 //Default settings to obtain basic functionality when
 //there is not user configuratioran
 cow.setDefaults = function()
 {
-    projSettings = 
+    projSettings =
     {
 	name : "CowLog Default",
 	videoDirectory : "",
-	author : "Matti Pastell",
+  dataDirectory : "..",
+  author : "Matti Pastell",
 	email : "",
 	nClasses : 3,
 	modifiers : false,
@@ -31,88 +35,161 @@ cow.setDefaults = function()
 cow.currentCodes = [];
 
 //Info about current subject
-var currentSubject = 
+var currentSubject =
     {
 	name : null,
-	date : null,
+	datetime : null,
 	project : null,
-	videos : []
-    }
-
-
-
+  results : [],
+	videos : [],
+  file : null
+  }
 
 var projSettings = null; //An object that contains the settings of current project
+var lastSender = null; //Keep the last sender for receiving time from IPC
 
-function code(sender){
+function code(sender)
+{
+  lastSender = sender;
+  ipc.send("video", {cmd: "getTime"} );
+}
+
+ipc.on("time", function(time){
+  onCode(time);
+});
+
+function onCode(time){
+    sender = lastSender;
+
+    var prettyTime = Math.round(time*100)/100;
+
+    //Handle end of coding separately
+    if (lastSender.id == "endSubject")
+    {
+      currentSubject.results.push({time : time, code : "END", "class" :0});
+      $("#currentCode").html("<strong>Time:</strong> " +
+        prettyTime + " <strong>Code: </strong>" + "END" + "<BR/>");
+      writeCodes();
+      return;
+    }
+
     var code = sender.innerHTML;
-    //The time is different for video and live versions
-    var time = (cow.videoVersion)?videoCurrentTime():new Date().toISOString();
-    //Display short version of time : live version
-    var prettyTime = (cow.videoVersion)?time:time.split("T")[1].split(".")[0];
+
 
     //Get the column of sender
     var colIndex = $(sender).parents("tr").find("td").index($(sender).parent());
-    //console.log(colIndex)
+    console.log(colIndex)
     var tdIndex = colIndex + 1;
     //console.log(tdIndex);
-    
+
     //If there are no modifiers write to results
     if (!projSettings.modifiers)
     {
-	localStorage.results += time + " " + code +
-	    " " + tdIndex +   "\r\n";
-	$("#currentCode").html("<strong>Time:</strong> " + prettyTime + " <strong>Code: </strong>" + code + "<BR/>");
+       currentSubject.results.push({"time" : time, "code" : code,
+          "class" : colIndex + 1})
+
+	      $("#currentCode").html("<strong>Time:</strong> " +
+        prettyTime + " <strong>Code: </strong>" + code + "<BR/>");
     }
     else
     {
-	//Check if current code has modifiers
-	if (projSettings.modifiedCodes.indexOf(code) > -1)
-	{
+	  //Check if current code has modifiers
+	   if (projSettings.modifiedCodes.indexOf(code) > -1)
+	    {
 	    //pause until a code with no modifier is hit
 	    (cow.videoVersion)?videoPause():cow.modifiedTime = time;
 	    cow.currentCodes[colIndex] = code;
 	    $(sender).siblings().attr("disabled", "disabled");
 	    $(sender).attr("disabled", "disabled");
-	    //console.log("Bloody modifiers!");
+	    //console.log("Has modifiers");
 	}
 	else
 	{
-	    //Play the video version and get the time of 
-            //first code in mod sequence live version
-	    (cow.videoVersion)?videoPlay():false;
-	    time = (cow.videoVersion)?time:cow.modifiedTime;
-	    prettyTime = (cow.videoVersion)?time:time.split("T")[1].split(".")[0];
-	    
+	    //Play the video version and get the time of
+      //first code in mod sequence live version
+	    videoPlay();
+	    prettyTime = Math.round(time*100)/100;
+
 	    cow.currentCodes[colIndex] = code;
 	    //Remove extra indices from currentCodes
 	    cow.currentCodes = cow.currentCodes.slice(0, tdIndex);
 	    //remove active class from other cols
 	    //$("button.codeButton").removeClass("active");
-	    
-	    
 	    //console.log("No modifiers!");
-	    console.log(cow.currentCodes.join(" "));
-	    localStorage.results +=  time + " " + cow.currentCodes.join(" ") + "\r\n";
-	    $("#currentCode").html("<strong>Time:</strong> " + prettyTime + " <strong>Code: </strong>" +  cow.currentCodes.join(" "));
+      code = cow.currentCodes.join(" ");
+	    currentSubject.results.push({"time" : time, "code" : code})
+	    $("#currentCode").html("<strong>Time:</strong> "
+          + prettyTime + " <strong>Code: </strong>" +  code);
 
 	    $("button.codeButton").removeAttr("disabled");
-	}
-    }
-
+	  }
+  }
+  //Write to file
+  writeCodes();
     $(sender).siblings().removeClass("active");
-    $(sender).addClass("active");    
+    $(sender).addClass("active");
+}
+
+function writeCodes()
+{
+  var datastr = "";
+  var res = currentSubject.results;
+
+  //Add header
+  if (!projSettings.modifiers)
+  {
+    header = "time\tcode\tclass\n";
+  }
+  else
+  {
+    header = "time";
+  	for (var i=1; i <= projSettings.nClasses; i++)
+  	{
+  	    header += "\tclass" + i;
+  	}
+  	header += "\n";
+  }
+
+  datastr += header;
+
+  for (var i=0; i < res.length; i++)
+  {
+    datastr += res[i]["time"] + "\t" + res[i]["code"];
+    if (!projSettings.modifiers)
+    {
+      datastr += "\t" + res[i]["class"];
+    }
+    datastr += "\n";
+  }
+
+  fs.writeFileSync(currentSubject.file, datastr);
 }
 
 
 
+//Read project settings from file
+function loadSettingsFile(evt)
+{
+    var files = evt.target.files;
+    input = new FileReader();
+    input.readAsText(files[0]);
+    input.onload =  LoadEvent;
+}
 
-//Shared javascript for CowLog web and mobile apps
+//Settings read event
+function LoadEvent(e)
+{
+    var text = input.result;
+    //console.log(text);
+    projSettings = JSON.parse(text);
+    loadSettings();
+}
+
+//Restore project settings from loaded project
+//projSettings object written in LoadEvent
 function loadSettings()
 {
-    var project = $("#storedProjects").val();
-    var config = localStorage.getObject(project);
-    projSettings = config;
+    config = projSettings;
     $("#projName").val(config.name);
     $("#Author").val(config.author);
     $("#email").val(config.email);
@@ -122,110 +199,43 @@ function loadSettings()
 
     if (config.modifiers)
     {
-	$("#useModifiers").attr("checked", "checked");
-	//modifierArray = config.modifiedCodes;
+	     $("#useModifiers").attr("checked", "checked");
     }
     else
     {
-	$("#useModifiers").removeAttr("checked");
+	     $("#useModifiers").removeAttr("checked");
     }
-    
+
     classBoxes();
-    
+
     var inputs = $("#classInputs input");
-    
+
     for (i = 0; i< config.nClasses; i++)
     {
-	inputs[i].value = config.codes[i];
+	     inputs[i].value = config.codes[i];
     }
-    
+
     if (config.modifiers)
     {
-	$("#modifiedClasses").val(modifierArray.join(","));
+	     $("#modifiedClasses").val(modifierArray.join(","));
     }
 
     makeButtons();
-    
-    
-    localStorage.projectLoaded = true;
-    //Disabling settings onload causes problems with Live version
-    (cow.videoVersion)?setTimeout(disableSettings, 200):null;
-
     //If config has keyboard shortcuts defined
     if (config.keyCodes.length > 0)
     {
-	//Make inputs
-	makeKeyInputs();
-	var keyInputs = $("#keyInputs input");
-	//Fill in the values
-	for (var i in keyInputs)
-	{
-	    keyInputs[i].value = projSettings.keyCodes[i];
-	}
-	//Make the bindings
-	bindKeys();
+  	   //Make inputs
+  	    makeKeyInputs();
+  	    var keyInputs = $("#keyInputs input");
+    	//Fill in the values
+    	for (var i in keyInputs)
+    	{
+    	    keyInputs[i].value = projSettings.keyCodes[i];
+    	}
+    	//Make the bindings
+  	   bindKeys();
     }
-    
-    localStorage.lastProject = projSettings.name;
     notification.success("Project " + projSettings.name  + " loaded");
-    
-}
-
-//Read project settings from file
-function loadSettingsFile(evt)
-{
-    var files = evt.target.files;
-    input = new FileReader();
-    input.readAsText(files[0]);
-    input.onload =  LoadEvent;
-    //alert(files[0].name);
-}
-
-//Settings read event
-function LoadEvent(e)
-{
-    var text = input.result;
-    //console.log(text);
-    var projSettings = JSON.parse(text);
-    //Save to localstorage
-    localStorage.setObject("savedProject_" + projSettings.name, projSettings);
-    //Update project selector
-    getStoredProjects();
-    //Set to imported and load it
-    $("#storedProjects").val("savedProject_" + projSettings.name);
-    loadSettings();
-}
-
-
-//Get loadable projects from 
-function getStoredProjects()
-{
-    var stored = localStorage;
-    var projects = [];
-    for (var key in stored)
-    {
-	if (key.match("savedProject_") !== null && key !== "savedProject_")
-	{
-	    projects.push(key);
-	}
-    }
-    
-    if (projects.length === 0)
-    {
-	//$("#LoadSettings").append("<em>No saved projects</em>");
-    }
-    else
-    {
-	var phtml = projects.map(function(x){return "<option value='" + 
-					 x +
-					"'>" + 
-					x.replace('savedProject_', '') + 
-					     "</option>";	
-					    });	
-	$("#storedProjects").html(phtml.join(''));
-
-	
-    }
 }
 
 //Make an array of buttons
@@ -236,17 +246,6 @@ function codes2buttons(codes)
     return buttons.join('');
 }
 
-//Set end get objects to localstorage 
-// http://stackoverflow.com/questions/2010892/storing-objects-in-html5-localstorage
-Storage.prototype.setObject = function(key, value) {
-    this.setItem(key, JSON.stringify(value));
-};
-
-Storage.prototype.getObject = function(key) {
-    var value = this.getItem(key);
-    return value && JSON.parse(value);
-};
-
 function useModifiers()
 {
     return($("#useModifiers").attr("checked") === "checked");
@@ -255,35 +254,20 @@ function useModifiers()
 //Save settings to file using php script on server
 function saveSettings()
 {
+    //Place settings to global "projSettings"
     storeSettings();
-    
-    if (cow.videoVersion)
-    {
-	//Save setting as text
-	if (navigator.onLine)
-	{
-	    exportData(JSON.stringify(projSettings, null, " "), projSettings.name + '_CowLogSettings.json');
-	}
-	else
-	{
-	    var v = window.open('', 'config', '');
-	    v.document.write("<pre>" + JSON.stringify(projSettings, null, " ")  + "</pre>");
-	}
-	
-	$("#projectprefs").dialog("close");
-    }
-   
-    notification.success("Project " + projSettings.name  + " saved succesfully.");
-}
+    var dname = projSettings.name + "_cowlog_project.json"
+    var path = dialog.showSaveDialog({title : "Save project settings",
+     defaultPath : dname,
+     filters :
+      [{name : ".json", extensions : [".json"]}]
+    });
 
-//Open settings JSON in new window
-function openSettings()
-{
-    //var projSettings = 
-    storeSettings();
-    
-    var v = window.open('', 'config', '');
-    v.document.write("<pre>" + JSON.stringify(projSettings, null, " ")  + "</pre>");
+    var data = JSON.stringify(projSettings, null, " ");
+    fs.writeFileSync(path, data);
+
+    $("#projectprefs").dialog("close");
+    notification.success("Project " + projSettings.name  + " saved succesfully.");
 }
 
 //Save classes from code and create buttons
@@ -296,23 +280,15 @@ function storeSettings()
     var modifierArray = null;
     var modifiers = useModifiers();
     var keyCodes = getKeyCodes();
-    
+
     if (modifiers)
     {
-	modifierArray = $("#modifiedClasses").val().split(',');
+	     modifierArray = $("#modifiedClasses").val().split(',');
     }
-    
-    //Clear buttons
-    //$("#buttonrow").html("")
-    //Add new buttons
-    //buttonHTML = codeArray.map(function(x){return codes2buttons(x)});
-    //$("#buttonrow").html("<td>" +  buttonHTML.join('</td><td>') + "</td>");
-    //setTimeout("resizePrefs()", 100)
 
-    
    //Save setting to localStorage
-    projSettings = 
-	{
+    projSettings =
+	  {
 	    name : $("#projName").val(),
 	    videoDirectory : $("#videoDir").val(),
 	    author : $("#Author").val(),
@@ -323,21 +299,13 @@ function storeSettings()
 	    keyCodes : keyCodes,
 	    modifiedCodes : modifierArray,
 	    player : $("#player").val()
-	};
-    
-    localStorage.setObject("savedProject_" + projSettings.name, projSettings);
-    localStorage.lastProject = projSettings.name;
-    localStorage.projectLoaded = true;
-    
+	  };
     //Make buttons for coding
     makeButtons();
     //Bind shortcut keys
-    (cow.videoVersion)?bindKeys():null;
-    getStoredProjects();
+    bindKeys();
     disableSettings();
-    //return(projSettings);
 }
-
 
 
 function disableSettings()
@@ -345,7 +313,7 @@ function disableSettings()
     //Disable options
     $("#projectprefs input").attr('disabled', 'disabled');
     $("#player").attr('disabled', 'disabled');
-    
+
     //Re-enable loading
     $("#LoadSettings").children().removeAttr('disabled');
 
@@ -384,14 +352,14 @@ function makeButtons()
     var codeArray = csvArray.map(function(x){
 	return x.split(',');
     });
-    
+
     //Clear buttons
     $("#buttonrow").html("");
     //Add new buttons
     var buttonHTML = codeArray.map(function(x){
 	return codes2buttons(x);
     });
-    
+
     $("#buttonrow").html("<td>" +  buttonHTML.join('</td><td>') + "</td>");
 
     if (cow.videoVersion)
@@ -418,7 +386,7 @@ function addCodeFields(classNo){
     {
 	html += "Code" +  i + " name: <input type='text'><br/>" ;
     }
-    
+
     html += "<button onclick='saveCodes()'>Save</button>";
 
     $("#addCodes").html(html);
@@ -437,7 +405,7 @@ function saveCodes()
 	select += "<option value='" + codes[i] + "'>" + codes[i] + "</option>";
 	buttons += "<button onclick='code(this)'>" +  codes[i] + " </button><BR/>";
     }
-    
+
     select += "</select></BR>";
     $("#codelabel").before(select);
     $("#addCodes").html("");
@@ -455,14 +423,14 @@ function makeKeyInputs()
 	function(){
 	    return this.value;}
     ).toArray().join().split(',');
-    
+
     var codeHTML = "<p>Type in the keyboard shortcut for each \
 behavior. (e.g. a, shift+a, alt+shift+k). If you want to use more than \
 one modifier key (e.g. alt+ctrl+z) you should define them in  \
 alphabetical order e.g. alt+ctrl+shift. It is advisable not to use \
 keys that are already in use by the browser e.g. ctrl+f, ctrl+l, alt+f, alt+s.</p>\
 <fieldset>";
-    
+
     for (var i = 0; i < allcodes.length; i++)
     {
 	codeHTML += "<label>" + allcodes[i] + "</label><input type='text' />";
@@ -474,15 +442,15 @@ keys that are already in use by the browser e.g. ctrl+f, ctrl+l, alt+f, alt+s.</
 
 function bindKeys()
 {
-    
-    var n = projSettings.keyCodes.length; 
+
+    var n = projSettings.keyCodes.length;
     //If we have some keys to bind...
     if (n > 0)
     {
 	//Put behaviors to one array
 	var codes = projSettings.codes.join().split(',');
 	var keys = projSettings.keyCodes;
-	
+
 	for (var i =0; i < n; i++)
 	{
 	    if (keys[i] !== "")
@@ -491,7 +459,7 @@ function bindKeys()
 		console.log("Bound " + keys[i] + " to " + codes[i]);
 	    }
 	}
-	
+
     }
 }
 
@@ -503,33 +471,8 @@ function bindButton(keys, content)
     $(document).bind('keydown', keys, function(){bButton.click()});
 }
 
-function exportData(data, filename){
-//Export results to text files
-//http://stackoverflow.com/questions/921037/jquery-table-to-csv-export
-    if (navigator.onLine)
-    {
-	
-	$("body").append(
-	    "<form id='exportform' \
-action='export.php' method='post'> \
-<input type='hidden' id='exportData' name='exportdata'/> \
-<input type='hidden' id='exportFile' name='exportfile'/> \
-</form>");
-	
-	$("#exportData").val(data);
-	$("#exportFile").val(filename);
-	$("#exportform").submit().remove();
-    }
-    else
-    {
-	alert("You seem to be offline, can't process request");
-
-    }
-}
-
-
 //Notification messages, shown from actions
-var notification = 
+var notification =
     {
 	dialog : null,
 	content : null,
@@ -549,7 +492,7 @@ var notification =
 	},
 
 	hide : function(){notification.dialog.slideUp();},
-	
+
 	success : function(text){this.message(text, "success");},
 	info : function(text){this.message(text, "info");},
 	error : function(text){this.message(text, "error");},
