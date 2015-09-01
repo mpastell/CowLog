@@ -24,9 +24,16 @@
         <label>E-mail:</label>
         <input type="email" class="form-control" id="email"/>
 
-        <label>Video directory: </label>
-        <input type="text" class="form-control" id="videoDir"/>
-
+        <label>Path for saved files: </label>
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-default" onclick="chooseDatadir()" type="button">
+            <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+              Choose directory
+            </button>
+          </span>
+          <input type="text" class="form-control" id="dataDir"/>
+        </div>
 
         <!-- Basic config without modifiers -->
         <label>Number of behavior classes:</label>
@@ -51,8 +58,9 @@
     <div id="keyInputs"></div>
   </form>
 
-    <div id="prefButtons">
+    <div id="prefButtons" style="margin-bottom:10px;">
     </div>
+
 </div>
 </div>
 

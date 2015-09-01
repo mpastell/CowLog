@@ -34,7 +34,10 @@ function classBoxes()
 
     var buttonHtml = "<p><button class='btn btn-default' onclick='makeKeyInputs()' id='keyInputButton'>Add keyboard shortcuts</button></p>";
 
-    buttonHtml += "</fieldset><button class='btn btn-default' onclick='saveSettings()'>Save settings</button>";
+    buttonHtml += "</fieldset><button class='btn btn-default btn-success btn-block' \
+     onclick='saveSettings()'>\
+      <span class='glyphicon glyphicon-save' aria-hidden='true'></span> \
+     Save settings</button>";
 
     $("#classInputs").html(boxHtml);
     $("#prefButtons").html(buttonHtml);
@@ -135,7 +138,8 @@ function storeSettings()
     projSettings =
 	  {
 	    name : $("#projName").val(),
-	    videoDirectory : $("#videoDir").val(),
+	    //videoDirectory : $("#videoDir").val(), //Not used, could be added back
+      dataDirectory : $("#dataDir").val(),
 	    author : $("#Author").val(),
 	    email : $("#email").val(),
 	    nClasses : parseInt($("#nClasses").val()),
@@ -208,7 +212,8 @@ function loadSettings(config)
     $("#projName").val(config.name);
     $("#Author").val(config.author);
     $("#email").val(config.email);
-    $("#videoDir").val(config.videoDirectory);
+    //$("#videoDir").val(config.videoDirectory);
+    $("#dataDir").val(config.dataDirectory);
     $("#nClasses").val(config.nClasses);
     $("#player").val(config.player);
 
@@ -247,4 +252,14 @@ function loadSettings(config)
     	    keyInputs[i].value = projSettings.keyCodes[i];
     	}
     }
+}
+
+
+function chooseDatadir()
+{
+  var path = dialog.showOpenDialog({
+    properties : ['openDirectory'],
+    title : "Choose output directory"
+  });
+  $("#dataDir").val(path);
 }

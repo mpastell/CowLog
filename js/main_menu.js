@@ -23,8 +23,20 @@ var template = [
           click : function(){
             ipc.send('edit-settings', '');}
       }]
+    },{
+      label : 'Help',
+      submenu : [
+        {
+          label : "About CowLog",
+          click : function(){ipc.send('show', 'about');}
+        },
+        {
+          label : "Documentation",
+          click : function(){ipc.send('show', 'help');}
+        }
+      ]
   }
-]
+];
 
 menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);

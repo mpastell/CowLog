@@ -16,7 +16,7 @@ cow.setDefaults = function()
     {
 	name : "CowLog Default",
 	videoDirectory : "",
-  dataDirectory : "..",
+  dataDirectory : null,
   author : "Matti Pastell",
 	email : "",
 	nClasses : 3,
@@ -78,7 +78,7 @@ function onCode(time){
 
     //Get the column of sender
     var colIndex = $(sender).parents("tr").find("td").index($(sender).parent());
-    console.log(colIndex)
+    //console.log(colIndex)
     var tdIndex = colIndex + 1;
     //console.log(tdIndex);
 
@@ -97,7 +97,7 @@ function onCode(time){
 	   if (projSettings.modifiedCodes.indexOf(code) > -1)
 	    {
 	    //pause until a code with no modifier is hit
-	    (cow.videoVersion)?videoPause():cow.modifiedTime = time;
+	    videoPause();
 	    cow.currentCodes[colIndex] = code;
 	    $(sender).siblings().attr("disabled", "disabled");
 	    $(sender).attr("disabled", "disabled");
@@ -126,8 +126,9 @@ function onCode(time){
   }
   //Write to file
   writeCodes();
-    $(sender).siblings().removeClass("active");
-    $(sender).addClass("active");
+
+  $(sender).siblings().removeClass("btn-primary");
+  $(sender).addClass("btn-primary");
 }
 
 function writeCodes()
@@ -138,14 +139,14 @@ function writeCodes()
   //Add header
   if (!projSettings.modifiers)
   {
-    header = "time\tcode\tclass\n";
+    header = "time,code,class\n";
   }
   else
   {
     header = "time";
   	for (var i=1; i <= projSettings.nClasses; i++)
   	{
-  	    header += "\tclass" + i;
+  	    header += ",class" + i;
   	}
   	header += "\n";
   }
@@ -154,10 +155,10 @@ function writeCodes()
 
   for (var i=0; i < res.length; i++)
   {
-    datastr += res[i]["time"] + "\t" + res[i]["code"];
+    datastr += res[i]["time"] + "," + res[i]["code"];
     if (!projSettings.modifiers)
     {
-      datastr += "\t" + res[i]["class"];
+      datastr += "," + res[i]["class"];
     }
     datastr += "\n";
   }

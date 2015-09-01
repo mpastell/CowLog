@@ -13,6 +13,8 @@ var mainWindow = null;
 var videoWin = null;
 var prefsWindow = null;
 var subjectWindow = null;
+var aboutWindow = null;
+var helpWindow = null;
 var exiting = false;
 
 // Quit when all windows are closed.
@@ -109,6 +111,19 @@ app.on('ready', function() {
                     show : true});
                 subjectWindow.loadUrl('file://' + __dirname + '/html/subject_window.html');
                 break;
+            case "about":
+                aboutWindow = new BrowserWindow(
+                  {width: 500, height: 450,
+                    "auto-hide-menu-bar" : true,
+                    icon: __dirname + '/almod.png'});
+                aboutWindow.loadUrl('file://' + __dirname + '/html/about.html');
+                break;
+            case "help":
+                helpWindow = new BrowserWindow(
+                  {width: 500, height: 600,
+                    "auto-hide-menu-bar" : true,
+                    icon: __dirname + '/almod.png'});
+                 helpWindow.loadUrl('file://' + __dirname + '/html/help.html')
             default:
                 break;
         }

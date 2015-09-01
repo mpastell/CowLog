@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CowLog help</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.5/css/bootstrap.min.css" media="screen"/>
+</head>
+<body>
+<div class="container">
+<div class="row col-md-12">
+
+<h4>Table of contents</h4>
+$toc$
+$body$
+
+</div>
+</div>
+</body>
+</html>

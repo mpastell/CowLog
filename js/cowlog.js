@@ -79,14 +79,35 @@ function openVideo(evt){
 
 ipc.on('current-subject', function(subject)
 {
-    console.log(subject);
+    //console.log(subject);
     currentSubject = subject;
     currentSubject.results = [];
-    currentSubject.datetime = new Date(Date.parse(subject.datestring));
-    currentSubject.file = projSettings.dataDirectory + "/" +
-    currentSubject.name + "_" +
-    currentSubject.datetime.toISOString() +
-    ".txt"
+
+    var dt = null;
+
+    if (isNaN(Date.parse(subject.datestring)))
+    {
+      dt = new Date();
+    }
+    else {
+      dt = new Date(Date.parse(subject.datestring));
+    }
+    console.log(dt);
+    console.log(dt.toISOString());
+
+    var path = projSettings.dataDirectory;
+
+    if (path === null)
+    {
+        path = dialog.showOpenDialog({
+        properties : ['openDirectory'],
+        title : "Choose output directory"
+      });
+    }
+
+    currentSubject.file = path + "/" +
+    currentSubject.name + "_" + dt.toISOString() +
+    ".csv"
 });
 
 //Receive video metadata
