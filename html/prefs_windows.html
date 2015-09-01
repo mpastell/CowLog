@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>Project preferences</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.5/css/bootstrap.min.css" media="screen"/>
+
+    <script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../js/prefs.js"></script>
+</head>
+<body>
+<div id="projectprefs" class="container">
+<div id="row col-md-12">
+    <!-- <p><button onclick="clearSettings()" class="btn btn-default" style="margin-top:10px;">Clear</button> -->
+
+    <form class="form-group">
+        <label for="projName">Project name:</label>
+        <input type="text" class="form-control" id="projName"/>
+
+        <label for="Author">Author:</label>
+        <input type="text" class="form-control" id="Author"/>
+
+        <label>E-mail:</label>
+        <input type="email" class="form-control" id="email"/>
+
+        <label>Video directory: </label>
+        <input type="text" class="form-control" id="videoDir"/>
+
+
+        <!-- Basic config without modifiers -->
+        <label>Number of behavior classes:</label>
+        <input type="text" class="form-control" id="nClasses">
+</form>
+        <div class="checkbox">
+           <label>
+             <input type="checkbox"  id="useModifiers"/> Use modifiers
+           </label>
+         </div>
+
+
+    <p><button onclick="classBoxes()" class="btn btn-default">Add codes</button></p>
+
+
+    <div id="classInputs">
+    </div>
+
+    <div id="modifierInputs">
+    </div>
+
+    <div id="keyInputs"></div>
+  </form>
+
+    <div id="prefButtons">
+    </div>
+</div>
+</div>
+
+</body>
+</html>

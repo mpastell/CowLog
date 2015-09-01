@@ -17,37 +17,37 @@ var exiting = false;
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform != 'darwin') {
-    app.quit();
-  }
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform != 'darwin') {
+        app.quit();
+    }
 });
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 1000, height: 800, icon: __dirname + '/almod.png'});
+    mainWindow = new BrowserWindow({width: 400, height: 800, icon: __dirname + '/almod.png'});
 
     // and load the index.html of the app.
-    mainWindow.loadUrl('file://' + __dirname + '/index.html');
+    mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
     //mainWindow.openDevTools();
 
     videoWin =  new BrowserWindow({ width: 600, height: 480,
-       "auto-hide-menu-bar" : true,
+        "auto-hide-menu-bar" : true,
         x :100, y :100,
         show : false
     });
-    videoWin.loadUrl('file://' + __dirname + '/videowindow_multi.html');
+    videoWin.loadUrl('file://' + __dirname + '/html/videowindow_multi.html');
     //videoWin.openDevTools();
 
     prefsWindow = new BrowserWindow({width: 500, height: 600,
         icon: __dirname + '/almod.png',
-        show : true});
-    prefsWindow.loadUrl('file://' + __dirname + '/prefs_windows.html');
-    //prefsWindow.openDevTools();
+        show : false});
+    prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_windows.html');
 
+    //prefsWindow.openDevTools();
 
     //For development quick access
     //subjectWindow = new BrowserWindow({width: 400, height: 500,
@@ -86,7 +86,7 @@ app.on('ready', function() {
     //New subject opened from subjectDialog
     ipc.on('current-subject', function(event, arg)
     {
-      mainWindow.webContents.send('current-subject', arg);
+        mainWindow.webContents.send('current-subject', arg);
     });
 
     //Settings saved from prefs window to main
@@ -99,15 +99,15 @@ app.on('ready', function() {
         switch (win)
         {
             case "prefs":
-                prefsWindow.loadUrl('file://' + __dirname + '/prefs_windows.html');
+                prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_windows.html');
                 prefsWindow.show();
                 break;
             case "subject":
-              subjectWindow = new BrowserWindow({width: 400, height: 400,
-                icon: __dirname + '/almod.png',
-                "auto-hide-menu-bar" : true,
-                show : true});
-                subjectWindow.loadUrl('file://' + __dirname + '/subject_window.html');
+                subjectWindow = new BrowserWindow({width: 400, height: 600,
+                    icon: __dirname + '/almod.png',
+                    "auto-hide-menu-bar" : true,
+                    show : true});
+                subjectWindow.loadUrl('file://' + __dirname + '/html/subject_window.html');
                 break;
             default:
                 break;
@@ -131,8 +131,8 @@ app.on('ready', function() {
     //Settings from file
     ipc.on('load-settings', function(event, arg) {
         var path = dialog.showOpenDialog({title : "Open project",
-         filters :
-          [{name : "CowLog project *.json", extensions : ["json"]}]
+            filters :
+                [{name : "CowLog project *.json", extensions : ["json"]}]
         });
 
         var text = fs.readFileSync(path[0], encoding="utf-8");
@@ -145,8 +145,8 @@ app.on('ready', function() {
     ipc.on('edit-settings', function(event, arg) {
         console.log("Editing settings")
         var path = dialog.showOpenDialog({title : "Open project",
-         filters :
-          [{name : "CowLog project *.json", extensions : ["json"]}]
+            filters :
+                [{name : "CowLog project *.json", extensions : ["json"]}]
         });
 
         var text = fs.readFileSync(path[0], encoding="utf-8");
@@ -158,30 +158,29 @@ app.on('ready', function() {
 
     //Send messages to main window
     ipc.on('main', function(event, arg) {
-        mainWindow.webContents.send('main', arg)
+        mainWindow.webContents.send('main', arg);
     });
 
-
-     prefsWindow.on('close', function(e)
-     {
-         if (!exiting)
-         {
-             e.preventDefault();
-             prefsWindow.hide();
-         }
-      });
+    prefsWindow.on('close', function(e)
+    {
+        if (!exiting)
+        {
+            e.preventDefault();
+            prefsWindow.hide();
+        }
+    });
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
-      exiting = true;
-      videoWin.close();
-      videoWin = null;
-      prefsWindow.close();
-      prefsWindow = null;
-      // Dereference the window object, usually you would store windows
-      // in an array if your app supports multi windows, this is the time
-      // when you should delete the corresponding element.
-      mainWindow = null;
+        exiting = true;
+        videoWin.close();
+        videoWin = null;
+        prefsWindow.close();
+        prefsWindow = null;
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        mainWindow = null;
 
-  });
+    });
 });

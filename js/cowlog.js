@@ -3,8 +3,8 @@
 //"use strict";
 
 /*Shared functions in cowlog.shared.js
-  occasionally need to which version we are using
-*/
+ occasionally need to which version we are using
+ */
 var ipc = require('ipc');
 var fs = require('fs');
 
@@ -32,34 +32,30 @@ $(document).ready(function(){
 
     cow.setDefaults();
 
-    //Init notification boxes
-    notification.init();
-    cow.setDefaults();
-
     //Time slider
     controls.slider = $("#timeSlider").slider({
-	     stop : function(event, ui) {
-	     videoSetTime(ui.value);
-	     //Play again if video wasn't paused on start
-	    if (!currentVideo.pausedOnSlideStart)
-	    {
-		      videoPlay();
-	    }
-	    //$("#onslide").hide();
-	   },
-	slide : function(event, ui) {
-	    //$("#onslide").show()
-	    controls.timeindicator.html(ui.value);
-	    //controls.timer = clearInterval(controls.timer);
-	},
-	start : function(event, ui) {
-	    currentVideo.pausedOnSlideStart = videoarray[0].paused;
-	    //Pause during sliding
-	    if (!currentVideo.pausedOnSlideStart)
-	    {
-		videoPause();
-	    }
-	}
+        stop : function(event, ui) {
+            videoSetTime(ui.value);
+            //Play again if video wasn't paused on start
+            if (!currentVideo.pausedOnSlideStart)
+            {
+                videoPlay();
+            }
+            //$("#onslide").hide();
+        },
+        slide : function(event, ui) {
+            //$("#onslide").show()
+            controls.timeindicator.html(ui.value);
+            //controls.timer = clearInterval(controls.timer);
+        },
+        start : function(event, ui) {
+            currentVideo.pausedOnSlideStart = videoarray[0].paused;
+            //Pause during sliding
+            if (!currentVideo.pausedOnSlideStart)
+            {
+                videoPause();
+            }
+        }
     });
     controls.timeindicator = $("#currentTime");
     controls.videolength = $("#videoLength");
@@ -83,27 +79,27 @@ function openVideo(evt){
 
 ipc.on('current-subject', function(subject)
 {
-  console.log(subject);
-  currentSubject = subject;
-  currentSubject.results = [];
-  currentSubject.datetime = new Date(Date.parse(subject.datestring));
-  currentSubject.file = projSettings.dataDirectory + "/" +
-                        currentSubject.name + "_" +
-                        currentSubject.datetime.toISOString() +
-                        ".txt"
+    console.log(subject);
+    currentSubject = subject;
+    currentSubject.results = [];
+    currentSubject.datetime = new Date(Date.parse(subject.datestring));
+    currentSubject.file = projSettings.dataDirectory + "/" +
+    currentSubject.name + "_" +
+    currentSubject.datetime.toISOString() +
+    ".txt"
 });
 
 //Receive video metadata
 ipc.on("metadata", function(metadata){
-  currentVideo.duration = metadata["duration"];
-  $( "#timeSlider" ).slider( "option", "max", currentVideo.duration);
-  controls.videolength.html(Math.round(currentVideo.duration) + " s");
+    currentVideo.duration = metadata["duration"];
+    $( "#timeSlider" ).slider( "option", "max", currentVideo.duration);
+    controls.videolength.html(Math.round(currentVideo.duration) + " s");
 });
 
 //Receive video time for slider
 ipc.on("timer", function(time){
-  controls.slider.slider( "option", "value", time);
-  controls.timeindicator.html(time);
+    controls.slider.slider( "option", "value", time);
+    controls.timeindicator.html(time);
 });
 
 //Video control for the whole array of videos
@@ -122,7 +118,7 @@ function videoStop()
 
 function videoPause()
 {
-  ipc.send("video", {cmd : "pause"});
+    ipc.send("video", {cmd : "pause"});
 }
 
 function videoFwd()
@@ -152,7 +148,7 @@ function resizeDivs()
 {
     $("#right").width($("#content").width() - $("#buttoncontainer").width()-2);
     $("#right").height(window.innerHeight - $("#header").height() -
-		       $("#prefnav").height() - 50);
+    $("#prefnav").height() - 50);
     $("#startUp").hide();
     //$("body").css("background-color", "white");
 
@@ -164,16 +160,16 @@ function undo()
 {
     if (currentSubject.results.length === 0)
     {
-	     $("#currentCode").html("No codes");
-	      return;
+        $("#currentCode").html("No codes");
+        return;
     }
 
     currentSubject.results.pop();
     //Write to file
     writeCodes();
-	  var last = currentSubject.results[currentSubject.results.length-1];
+    var last = currentSubject.results[currentSubject.results.length-1];
     videoSetTime(last["time"]);
-	  $("#currentCode").html("<strong>Time:</strong> " +
-          Math.round(last["time"]*100)/100 +
-          " <strong>Code: </strong>" + last["code"] + "<BR/>");
+    $("#currentCode").html("<strong>Time:</strong> " +
+    Math.round(last["time"]*100)/100 +
+    " <strong>Code: </strong>" + last["code"] + "<BR/>");
 }

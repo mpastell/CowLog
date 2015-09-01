@@ -223,7 +223,7 @@ function loadSettings()
 //Make an array of buttons
 function codes2buttons(codes)
 {
-    var buttons = codes.map(function(x){return "<button onclick='code(this)' class='codeButton'>" + x + "</button><BR/>";
+    var buttons = codes.map(function(x){return "<button onclick='code(this)' class='btn btn-block'>" + x + "</button>";
 				       });
     return buttons.join('');
 }
@@ -269,42 +269,41 @@ function makeButtons()
     $("#buttonrow").html("");
     //Add new buttons
     var buttonHTML = codeArray.map(function(x){
-	return codes2buttons(x);
+	     return codes2buttons(x);
     });
 
     $("#buttonrow").html("<td>" +  buttonHTML.join('</td><td>') + "</td>");
 
     if (cow.videoVersion)
     {
-	var widths = $("#buttonrow button").map(function(){
-	    return this.clientWidth;
-	}).toArray();
-	var maxWidth = Math.max.apply(null, widths);
-	$("button.codeButton").width(maxWidth);
-    }
+  	var widths = $("#buttonrow button").map(function(){
+  	    return this.clientWidth;
+  	}).toArray();
+	 var maxWidth = Math.max.apply(null, widths);
+	 $("button.codeButton").width(maxWidth);
+  }
 }
 
 function bindKeys()
 {
-
-    var n = projSettings.keyCodes.length;
-    //If we have some keys to bind...
-    if (n > 0)
-    {
+  var n = projSettings.keyCodes.length;
+  //If we have some keys to bind...
+  if (n > 0)
+  {
 	//Put behaviors to one array
 	var codes = projSettings.codes.join().split(',');
 	var keys = projSettings.keyCodes;
 
-	for (var i =0; i < n; i++)
-	{
-	    if (keys[i] !== "")
-	    {
-		bindButton(keys[i], codes[i]);
-		console.log("Bound " + keys[i] + " to " + codes[i]);
-	    }
-	}
+  	for (var i =0; i < n; i++)
+  	{
+      if (keys[i] !== "")
+      {
+  	      bindButton(keys[i], codes[i]);
+  	      console.log("Bound " + keys[i] + " to " + codes[i]);
+      }
+  	}
 
-    }
+  }
 }
 
 //Bind a coding button to a key
@@ -313,39 +312,4 @@ function bindButton(keys, content)
     //Find an element with specified content
     var bButton = $('#buttonrow button').filter(function(){return($(this).html() == content)});
     $(document).bind('keydown', keys, function(){bButton.click()});
-}
-
-//Notification messages, shown from actions
-var notification =
-    {
-	dialog : null,
-	content : null,
-	//Called onload
-	init : function(){
-	    this.dialog = $("#notification");
-	    this.content = $(this.dialog).find("p");
-	},
-
-	message : function(newMessage, type){
-	    //Move the position to scrollBottom in liveVersion
-	    (cow.liveVersion)?this.dialog.css("top", $("body").scrollTop() + 100):null;
-	    this.content.html(newMessage);
-	    this.dialog.attr("class", type);
-	    this.dialog.slideDown();
-	    setTimeout(notification.hide, 2000);
-	},
-
-	hide : function(){notification.dialog.slideUp();},
-
-	success : function(text){this.message(text, "success");},
-	info : function(text){this.message(text, "info");},
-	error : function(text){this.message(text, "error");},
-	warning : function(text){this.message(text, "warning");},
-    };
-
-
-//Check if a variable exists in localStorage
-//Firefox returns null and chrome undefined
-function isDefined(key){
-    return (typeof localStorage[key] !== "undefined" && localStorage[key] !== null)
 }
