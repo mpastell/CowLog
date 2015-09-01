@@ -4,42 +4,42 @@
     <meta charset="UTF-8">
 
     <title>Project preferences</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.5/css/bootstrap.min.css" media="screen"/>
+
     <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="js/prefs.js"></script>
-    <link rel="stylesheet" type="text/css" href="cowlog.css" media="screen"/>
-
 </head>
 <body>
-<div id="projectprefs" class="prefs">
+<div id="projectprefs" class="container">
+<div id="row col-md-12">
+    <!-- <p><button onclick="clearSettings()" class="btn btn-default" style="margin-top:10px;">Clear</button> -->
 
-    <p><button onclick="clearSettings()">Create new</button>
-    <button onclick="enableSettings()">Edit settings</button></p>
+    <form class="form-group">
+        <label for="projName">Project name:</label>
+        <input type="text" class="form-control" id="projName"/>
 
+        <label for="Author">Author:</label>
+        <input type="text" class="form-control" id="Author"/>
 
-    <fieldset>
-        <label>Project name:</label><input type="text" id="projName"/>
-        <label>Author:</label><input type="text" id="Author"/>
         <label>E-mail:</label>
-        <input type="email" id="email"/>
+        <input type="email" class="form-control" id="email"/>
 
-    <!--    <label>Choose videoplayer:</label>
-        <select id="player">
-            <option value="html">Native HTLM5</option>
-            <option value="vlc">VLC player</option>
-        </select> -->
-
-        <!-- TODO replace with native file dialog -->
         <label>Video directory: </label>
-        <input type="text" id="videoDir"/>
+        <input type="text" class="form-control" id="videoDir"/>
+
 
         <!-- Basic config without modifiers -->
         <label>Number of behavior classes:</label>
-        <input type="text" id="nClasses">
+        <input type="text" class="form-control" id="nClasses">
+</form>
+        <div class="checkbox">
+           <label>
+             <input type="checkbox"  id="useModifiers"/> Use modifiers
+           </label>
+         </div>
 
-        <label>Use modifiers:</label> <input type="checkbox" id="useModifiers"/>
-    </fieldset>
 
-    <p><button onclick="classBoxes()">Add codes</button></p>
+    <p><button onclick="classBoxes()" class="btn btn-default">Add codes</button></p>
 
 
     <div id="classInputs">
@@ -49,10 +49,11 @@
     </div>
 
     <div id="keyInputs"></div>
-
+  </form>
 
     <div id="prefButtons">
     </div>
+</div>
 </div>
 
 </body>

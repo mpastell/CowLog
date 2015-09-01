@@ -14,26 +14,27 @@ function useModifiers()
 function classBoxes()
 {
     var n = parseInt($("#nClasses").val());
-    var boxHtml = "<h3>Type in behaviors in each class as comma separated list</h3><fieldset>";
+    var boxHtml = "<h4>Type in behaviors in each class as comma separated list</h4><div class='form-group'>";
     var modHtml = "";
 
     for (var i=1; i<=n; i++)
     {
-        boxHtml += "<label>Class" +  i + "</label><input type='text'/>";
+        boxHtml += "<label>Class" +  i + "</label><input class='form-control' type='text'/>";
     }
 
     //If modifiers are used
     if (useModifiers())
     {
-        modHtml = "<h3>Type in behaviors with modifiers as comma separated list</h3>";
-        modHtml += "<fieldset><label>Behaviors with modifiers:</label><input type='text' id='modifiedClasses' /></fieldset>";
+        modHtml = "<h4>Type in behaviors with modifiers as comma separated list</h4>";
+        modHtml += "<label>Behaviors with modifiers:</label>" +
+        "<input type='text' class='form-control' id='modifiedClasses' /></fieldset>";
     }
 
     $("#modifierInputs").html(modHtml);
 
-    var buttonHtml = "<p><button onclick='makeKeyInputs()' id='keyInputButton'>Add keyboard shortcuts</button></p>";
+    var buttonHtml = "<p><button class='btn btn-default' onclick='makeKeyInputs()' id='keyInputButton'>Add keyboard shortcuts</button></p>";
 
-    buttonHtml += "</fieldset><button onclick='saveSettings()'>Save settings</button>";
+    buttonHtml += "</fieldset><button class='btn btn-default' onclick='saveSettings()'>Save settings</button>";
 
     $("#classInputs").html(boxHtml);
     $("#prefButtons").html(buttonHtml);
@@ -48,18 +49,18 @@ function makeKeyInputs()
 	    return this.value;}
     ).toArray().join().split(',');
 
-    var codeHTML = "<p>Type in the keyboard shortcut for each \
+    var codeHTML = "<h4>Define keyboard shortcuts</h4> <p>Type in the keyboard shortcut for each \
 behavior. (e.g. a, shift+a, alt+shift+k). If you want to use more than \
 one modifier key (e.g. alt+ctrl+z) you should define them in  \
-alphabetical order e.g. alt+ctrl+shift. It is advisable not to use \
+alphabetical order e.g. alt+ctrl+shift.</p> <p>It is advisable not to use \
 keys that are already in use by the browser e.g. ctrl+f, ctrl+l, alt+f, alt+s.</p>\
-<fieldset>";
+<div class='form-group'>";
 
     for (var i = 0; i < allcodes.length; i++)
     {
-	codeHTML += "<label>" + allcodes[i] + "</label><input type='text' />";
+	codeHTML += "<label>" + allcodes[i] + "</label><input class='form-control' type='text' />";
     }
-    codeHTML += "</fieldset>";
+    codeHTML += "</div>";
 
     $("#keyInputs").html(codeHTML);
 }
@@ -151,7 +152,7 @@ function storeSettings()
     //makeButtons();
     //Bind shortcut keys
     //bindKeys();
-    disableSettings();
+    ipc.send("hide-window", "prefs");
 }
 
 function getKeyCodes()
@@ -169,7 +170,7 @@ function addCodeFields(classNo){
 	html += "Code" +  i + " name: <input type='text'><br/>" ;
     }
 
-    html += "<button onclick='saveCodes()'>Save</button>";
+    html += "<button onclick='saveCodes()' class='btn btn-default'>Save</button>";
 
     $("#addCodes").html(html);
 }
@@ -199,7 +200,6 @@ function saveCodes()
 ipc.on("project-settings", function(settings)
 {
     loadSettings(settings);
-    disableSettings();
 });
 
 function loadSettings(config)

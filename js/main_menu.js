@@ -16,8 +16,12 @@ var template = [
       {
         label : "New project",
         click : function(){
-          ipc.send('show', 'prefs');
-        }
+          ipc.send('show', 'prefs');}
+      },
+      {
+          label : "Edit project",
+          click : function(){
+            ipc.send('edit-settings', '');}
       }]
   }
 ]

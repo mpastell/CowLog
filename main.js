@@ -42,15 +42,15 @@ app.on('ready', function() {
     videoWin.loadUrl('file://' + __dirname + '/videowindow_multi.html');
     //videoWin.openDevTools();
 
-    prefsWindow = new BrowserWindow({width: 600, height: 600,
+    prefsWindow = new BrowserWindow({width: 500, height: 600,
         icon: __dirname + '/almod.png',
-        show : false});
+        show : true});
     prefsWindow.loadUrl('file://' + __dirname + '/prefs_windows.html');
     //prefsWindow.openDevTools();
 
 
     //For development quick access
-    //subjectWindow = new BrowserWindow({width: 600, height: 650,
+    //subjectWindow = new BrowserWindow({width: 400, height: 500,
     //    "auto-hide-menu-bar" : true,
     //    icon: __dirname + '/almod.png',
     //    show : true});
@@ -89,7 +89,7 @@ app.on('ready', function() {
       mainWindow.webContents.send('current-subject', arg);
     });
 
-    //Settings from prefs window
+    //Settings saved from prefs window to main
     ipc.on('project-settings', function(event, arg) {
         mainWindow.webContents.send('project-settings', arg);
     });
@@ -99,6 +99,7 @@ app.on('ready', function() {
         switch (win)
         {
             case "prefs":
+                prefsWindow.loadUrl('file://' + __dirname + '/prefs_windows.html');
                 prefsWindow.show();
                 break;
             case "subject":
@@ -119,6 +120,9 @@ app.on('ready', function() {
             case "prefs":
                 prefsWindow.hide();
                 break;
+            case "subject":
+                subjectWindow.hide();
+                break;
             default:
                 break;
         }
@@ -135,7 +139,21 @@ app.on('ready', function() {
 
         var projSettings = JSON.parse(text);
         mainWindow.webContents.send('project-settings', projSettings);
+        //prefsWindow.webContents.send('project-settings', projSettings);
+    });
+
+    ipc.on('edit-settings', function(event, arg) {
+        console.log("Editing settings")
+        var path = dialog.showOpenDialog({title : "Open project",
+         filters :
+          [{name : "CowLog project *.json", extensions : ["json"]}]
+        });
+
+        var text = fs.readFileSync(path[0], encoding="utf-8");
+
+        var projSettings = JSON.parse(text);
         prefsWindow.webContents.send('project-settings', projSettings);
+        prefsWindow.show();
     });
 
     //Send messages to main window
@@ -144,14 +162,14 @@ app.on('ready', function() {
     });
 
 
-    prefsWindow.on('close', function(e)
-    {
-        if (!exiting)
-        {
-            e.preventDefault();
-            prefsWindow.hide();
-        }
-    });
+     prefsWindow.on('close', function(e)
+     {
+         if (!exiting)
+         {
+             e.preventDefault();
+             prefsWindow.hide();
+         }
+      });
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {

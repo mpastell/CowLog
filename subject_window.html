@@ -3,33 +3,55 @@
 <head lang="en">
     <meta charset="UTF-8">
 
-    <title>Project preferences</title>
+    <title>New Subject</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.5/css/bootstrap.min.css" media="screen"/>
 
+    <!-- Needed for date picker -->
     <link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.21.custom.css" media="screen"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>
     <script type="text/javascript" src="js/subject_windows.js"></script>
-    <link rel="stylesheet" type="text/css" href="cowlog.css" media="screen"/>
+
 </head>
 <body>
 
-<!-- New subject dialog -->
-<div id="subjectprefs" class="prefs">
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+  <h4>Code new video(s)</h4>
   <p>Type in the name of the subject that
-     you are coding and the date and time when video recording started.</p>
+     you are coding and select date and time when video recording started
+     and video files</p>
+<form>
+<div class="form-group">
+  <label for="subjectName">Name:</label>
+  <input type="text" class="form-control" id="subjectName" title="The name of the subject"/>
+  <label for="subjectDate">Video recording start time:</label>
+  <input type="text" class="form-control" id="subjectDate" title="Date without delimiters"/>
+</div>
+</form>
+<button type="button" onclick="chooseVideo()" class="btn btn-default">
+  <span class="glyphicon glyphicon-film" aria-hidden="true"></span> Choose video(s)
+</button>
 
-  <fieldset>
-<label>Name:</label>
-<input type="text" id="subjectName" title="The name of the subject"/>
-<label>Video recording start time:</label>
-<input type="text" id="subjectDate" title="Date without delimiters"/>
-<p> <label for="getVideo">Video file(s):</label><BR/>
-<button onclick="chooseVideo()">Select videos</button><BR/>
-<button onclick="openVideo()">Start coding</button><BR/>
+<div id="videos" style = "margin-bottom:20px;"></div>
+</div>
+</div>
 
+<div class="row">
+<div class="col-xs-3"></div>
+<div class="col-xs-6" id="openButton">
 
 </div>
+<div class="col-xs-3"></div>
+</div>
+
+</div>
+
+
 </body>
 </html>

@@ -12,7 +12,11 @@ function chooseVideo(){
     [{name : "Video files", extensions : ["mkv", "avi", "mp4", "ogg", "ogv"]},
     {name : "All files", extensions : ["*"]}]
     });
-    console.log(files)
+    //console.log(files)
+    $("#videos").html("<h5>Selected:</h5>" + files.join("<br/>"));
+
+    $("#openButton").html('<button onclick="openVideo()" class="btn btn-default">' +
+      '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Start coding</button>');
 }
 
 //Get videofiles from dialog send to video window
@@ -28,6 +32,7 @@ function openVideo()
 
     ipc.send('openvideos', files);
     ipc.send('current-subject', currentSubject);
+    ipc.send('hide-window', 'subject')
 }
 
 $(document).ready(function(){
