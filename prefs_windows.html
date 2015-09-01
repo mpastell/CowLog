@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>Project preferences</title>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/prefs.js"></script>
+    <link rel="stylesheet" type="text/css" href="cowlog.css" media="screen"/>
+
+</head>
+<body>
+<div id="projectprefs" class="prefs">
+
+    <p><button onclick="clearSettings()">Create new</button>
+    <button onclick="enableSettings()">Edit settings</button></p>
+
+
+    <fieldset>
+        <label>Project name:</label><input type="text" id="projName"/>
+        <label>Author:</label><input type="text" id="Author"/>
+        <label>E-mail:</label>
+        <input type="email" id="email"/>
+
+    <!--    <label>Choose videoplayer:</label>
+        <select id="player">
+            <option value="html">Native HTLM5</option>
+            <option value="vlc">VLC player</option>
+        </select> -->
+
+        <!-- TODO replace with native file dialog -->
+        <label>Video directory: </label>
+        <input type="text" id="videoDir"/>
+
+        <!-- Basic config without modifiers -->
+        <label>Number of behavior classes:</label>
+        <input type="text" id="nClasses">
+
+        <label>Use modifiers:</label> <input type="checkbox" id="useModifiers"/>
+    </fieldset>
+
+    <p><button onclick="classBoxes()">Add codes</button></p>
+
+
+    <div id="classInputs">
+    </div>
+
+    <div id="modifierInputs">
+    </div>
+
+    <div id="keyInputs"></div>
+
+
+    <div id="prefButtons">
+    </div>
+</div>
+
+</body>
+</html>

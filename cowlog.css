@@ -140,14 +140,8 @@ button
 /* } */
 
 
-
-
-
-
 div.prefs
 {
-    display : none;
-    float : none;
     margin-top: 10px;
     margin-bottom: 10px;
     margin-right: auto;
@@ -157,8 +151,6 @@ div.prefs
     padding: 10 px;
     text-align : justify;
 }
-
-
 
 
 /* #help */
@@ -189,7 +181,7 @@ div.footer
     padding-top: 10px;
     padding-bottom: 10px;
     clear : both;
-    color : white;    
+    color : white;
     text-align : center;
     background-color : #444;
 }
@@ -333,9 +325,9 @@ http://azuliadesigns.com/css-message-notification-bars/
 }
 
 #notification h1
-{    
+{
     margin : 0px;
-    padding : 15px 0px 15px;  
+    padding : 15px 0px 15px;
     text-align : center;
     font-weight : normal;
     font-size : 16px;
@@ -383,7 +375,7 @@ http://azuliadesigns.com/css-message-notification-bars/
 #startUp h1
 {
     margin : 0;
-    padding : 0;    
+    padding : 0;
     text-align : center;
     font-weight : normal;
 }
@@ -507,5 +499,3 @@ video.player
 .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
 .ui-timepicker-div td { font-size: 90%; }
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-
-

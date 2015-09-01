@@ -11,21 +11,14 @@
 
     <link rel="stylesheet" type="text/css" href="cowlog.css"
 	  media="screen"/>
-    <link rel="stylesheet" type="text/css"
-	  href="css/custom-theme/jquery-ui-1.8.21.custom.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.21.custom.css" media="screen"/>
 
     <link rel="icon" href="almod.png" />
 
-
     <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.hotkeys.js"></script>
 
-    <script type="text/javascript"
-	    src="js/jquery.hotkeys.js"></script>
-    <script type="text/javascript"
-	    src="js/jquery-ui-timepicker-addon.js"></script>
-
-    <script type="text/javascript" src="js/vlc.js"></script>
     <script type="text/javascript" src="js/cowlog.shared.js"></script>
     <script type="text/javascript" src="js/cowlog.js"></script>
     <script type="text/javascript" src="js/main_menu.js"></script>
@@ -38,7 +31,7 @@
 
       <div id="buttoncontainer">
 	<!-- <a href="#" id="newSubject"> Start coding</a></BR> -->
-	<button id="newSubject" class="topButton">New subject</button>
+	<button id="newSubject" onclick="openVideo()" class="topButton">New subject</button>
 	<button id="endSubject" class="topButton" onclick="code(this)">End coding</button><BR/>
 
 	<input type="text" size="3" id="speed"
@@ -131,99 +124,6 @@
 
 
       <div id="blank"></div>
-
-
-    <!-- The stuff for dialogs -->
-
-    <!-- New subject dialog -->
-    <div id="subjectprefs" class="prefs">
-      <p>Type in the name of the subject that
-	       you are coding and the date and time when video recording started.</p>
-
-      <fieldset>
-	<label>Name:</label>
-	<input type="text" id="subjectName" title="The name of the subject"/>
-	<label>Video recording start time:</label>
-	<input type="text" id="subjectDate" title="Date without delimiters"/>
-	<p> <label for="getVideo">Video file:</label><BR/>
-	  <input type="file" multiple="multiple" id="getVideo"
-		 accept="video/*" /></p>
-      </fieldset>
-
-    </div>
-
-
-    <!-- Project preferences dialog -->
-    <div id="loadProject" class="prefs">
-
-      <p>Load from file:</p>
-	    <input type="file" id="getSettings"
-		   accept="*.txt"/>
-    </div>
-
-
-    <div id="projectprefs" class="prefs">
-
-
-      <a href="#" class="toggleParagraph">Help</a>
-      <p class="helper">
-	You can define project settings
-	including behavioral codes and save the settings.
-	Settings are stored in
-	browsers <a href="https://developer.mozilla.org/en/DOM/Storage" target="_blank">localStorage</a>
-	for convinience, but that is not "safe" (they can
-	disappear if you clear the cache) so they should also
-	saved to a local file. You can also open a stored
-	project for editing using the &ldquo;Projects > Load
-	project&rdquo;.
-      </p>
-
-
-      <p><button onclick="clearSettings()">Create new</button>
-	<button onclick="enableSettings()">Edit settings</button></p>
-
-
-      <fieldset>
-	<label>Project name:</label><input type="text" id="projName"/>
-	<label>Author:</label><input type="text" id="Author"/>
-	<label>E-mail:</label>
-	<input type="email" id="email"/>
-
-	<label>Choose videoplayer:</label>
-	<select id="player">
-	  <option value="html">Native HTLM5</option>
-	  <option value="vlc">VLC player</option>
-	</select>
-
-	<label>Video directory: </label>
-	<input type="text" id="videoDir"
-	     title="Set the video directory as full path
-		    e.g c:\videos or /home/matti/videos.
-		    This is only required with VLC player" />
-
-      <!-- Basic config without modifiers -->
-      <label>Number of behavior classes:</label>
-      <input type="text" id="nClasses">
-
-	<label>Use modifiers:</label> <input type="checkbox" id="useModifiers"/>
-      </fieldset>
-
-	<p><button onclick="classBoxes()">Add codes</button></p>
-
-
-
-	<div id="classInputs">
-	</div>
-
-	<div id="modifierInputs">
-	</div>
-
-  <div id="keyInputs"></div>
-
-
-	<div id="prefButtons">
-	</div>
-</div>
 
 
 <div id="notification" class="success">

@@ -6,7 +6,7 @@
 var cow = {};
 var ipc = require('ipc');
 var remote = require('remote');
-var dialog = remote.require('dialog');
+
 
 //Default settings to obtain basic functionality when
 //there is not user configuratioran
@@ -167,24 +167,6 @@ function writeCodes()
 
 
 
-//Read project settings from file
-function loadSettingsFile(evt)
-{
-    var files = evt.target.files;
-    input = new FileReader();
-    input.readAsText(files[0]);
-    input.onload =  LoadEvent;
-}
-
-//Settings read event
-function LoadEvent(e)
-{
-    var text = input.result;
-    //console.log(text);
-    projSettings = JSON.parse(text);
-    loadSettings();
-}
-
 //Restore project settings from loaded project
 //projSettings object written in LoadEvent
 function loadSettings()
@@ -246,12 +228,9 @@ function codes2buttons(codes)
     return buttons.join('');
 }
 
-function useModifiers()
-{
-    return($("#useModifiers").attr("checked") === "checked");
-}
 
-//Save settings to file using php script on server
+
+//Save settings to file using
 function saveSettings()
 {
     //Place settings to global "projSettings"
@@ -270,88 +249,21 @@ function saveSettings()
     notification.success("Project " + projSettings.name  + " saved succesfully.");
 }
 
-//Save classes from code and create buttons
-function storeSettings()
+//Receive project settings from preds_window
+ipc.on("project-settings", function(settings)
 {
-    var csvArray = $("#classInputs  input").map(function(){
-	return this.value;
-    }).toArray();
-    var codeArray = csvArray.map(function(x){return x.split(',');});
-    var modifierArray = null;
-    var modifiers = useModifiers();
-    var keyCodes = getKeyCodes();
-
-    if (modifiers)
-    {
-	     modifierArray = $("#modifiedClasses").val().split(',');
-    }
-
-   //Save setting to localStorage
-    projSettings =
-	  {
-	    name : $("#projName").val(),
-	    videoDirectory : $("#videoDir").val(),
-	    author : $("#Author").val(),
-	    email : $("#email").val(),
-	    nClasses : parseInt($("#nClasses").val()),
-	    modifiers : modifiers,
-	    codes : csvArray,
-	    keyCodes : keyCodes,
-	    modifiedCodes : modifierArray,
-	    player : $("#player").val()
-	  };
+    projSettings = settings;
     //Make buttons for coding
     makeButtons();
     //Bind shortcut keys
     bindKeys();
-    disableSettings();
-}
-
-
-function disableSettings()
-{
-    //Disable options
-    $("#projectprefs input").attr('disabled', 'disabled');
-    $("#player").attr('disabled', 'disabled');
-
-    //Re-enable loading
-    $("#LoadSettings").children().removeAttr('disabled');
-
-    //$("#classInputs > input").attr('disabled', 'disabled');
-    //$("#Inputs > input").attr('disabled', 'disabled');
-    //$("#Inputs > input").attr('disabled', 'disabled');
-    //$("#modifierInputs > input").attr('disabled', 'disabled');
-}
-
-function enableSettings()
-{
-    $("#projectprefs input").removeAttr('disabled');
-    $("#projectprefs select").removeAttr('disabled');
-    //$("#classInputs > input").removeAttr('disabled');
-    //$("#modifierInputs > input").removeAttr('disabled');
-}
-
-function clearSettings()
-{
-    enableSettings();
-    $("#projectprefs input").val("");
-    $("#classInputs").html("");
-    $("#projectprefs > select").removeAttr('disabled');
-    $("#modifierInputs").html("");
-    $("#keyInputs").html("");
-    $("#prefButtons").html("");
-}
-
+});
 
 //Add buttons to UI based on project configuration
 function makeButtons()
 {
-    var csvArray = $("#classInputs input").map(function(){
-	return this.value;
-    }).toArray();
-    var codeArray = csvArray.map(function(x){
-	return x.split(',');
-    });
+
+    var codeArray = projSettings.codeArray;
 
     //Clear buttons
     $("#buttonrow").html("");
@@ -370,74 +282,6 @@ function makeButtons()
 	var maxWidth = Math.max.apply(null, widths);
 	$("button.codeButton").width(maxWidth);
     }
-}
-
-function getKeyCodes()
-{
-    return $("#keyInputs input").map(function(){
-	return this.value;
-    }).toArray();
-}
-
-function addCodeFields(classNo){
-    var n = parseInt($("#classNo").val());
-    var html = "";
-    for (i=1; i<=n; i++)
-    {
-	html += "Code" +  i + " name: <input type='text'><br/>" ;
-    }
-
-    html += "<button onclick='saveCodes()'>Save</button>";
-
-    $("#addCodes").html(html);
-}
-
-function saveCodes()
-{
-    var inputs = $("#addCodes > input");
-    codes = [];
-    var select = "</BR><select>";
-    var buttons = "";
-
-    for (i = 0; i < inputs.length; i++)
-    {
-	codes[i] = inputs[i].value;
-	select += "<option value='" + codes[i] + "'>" + codes[i] + "</option>";
-	buttons += "<button onclick='code(this)'>" +  codes[i] + " </button><BR/>";
-    }
-
-    select += "</select></BR>";
-    $("#codelabel").before(select);
-    $("#addCodes").html("");
-    $("#buttonrow > td:first").html(buttons);
-    $("#codelabel").html("Number of modifiers for code:");
-
-}
-
-
-
-function makeKeyInputs()
-{
-    $("#keyInputButton").hide();
-    var allcodes = $("#classInputs  input").map(
-	function(){
-	    return this.value;}
-    ).toArray().join().split(',');
-
-    var codeHTML = "<p>Type in the keyboard shortcut for each \
-behavior. (e.g. a, shift+a, alt+shift+k). If you want to use more than \
-one modifier key (e.g. alt+ctrl+z) you should define them in  \
-alphabetical order e.g. alt+ctrl+shift. It is advisable not to use \
-keys that are already in use by the browser e.g. ctrl+f, ctrl+l, alt+f, alt+s.</p>\
-<fieldset>";
-
-    for (var i = 0; i < allcodes.length; i++)
-    {
-	codeHTML += "<label>" + allcodes[i] + "</label><input type='text' />";
-    }
-    codeHTML += "</fieldset>";
-
-    $("#keyInputs").html(codeHTML);
 }
 
 function bindKeys()
