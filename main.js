@@ -30,7 +30,7 @@ app.on('window-all-closed', function() {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 400, height: 800, icon: __dirname + '/almod.png'});
+    mainWindow = new BrowserWindow({width: 400, height: 850, icon: __dirname + '/almod.png'});
 
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/html/index.html');

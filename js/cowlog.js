@@ -105,9 +105,12 @@ ipc.on('current-subject', function(subject)
       });
     }
 
+    var dstring = dt.toISOString();
+    dstring = dstring.split(":").join("");
+    dstring = dstring.replace(".","");
+    console.log(dstring);
     currentSubject.file = path + "/" +
-    currentSubject.name + "_" + dt.toISOString() +
-    ".csv"
+    currentSubject.name + "_" + dstring + ".csv";
 });
 
 //Receive video metadata
