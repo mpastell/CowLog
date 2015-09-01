@@ -58,7 +58,7 @@ This means that the program supports the following formats:
 * WebM
 * Ogg Theora Vorbis
 
-See https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats for
+See [https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats) for
 more info.
 
 # Converting videos for suitable codecs:
@@ -81,6 +81,12 @@ Methods. 41(2), 472-476.
 # License
 This software is licensed under the GNU GPL v2 license.
 
+# Bug reports
+
+Report bugs on Github
+[https://github.com/mpastell/CowLog](https://github.com/mpastell/CowLog) or via
+e-mail.
+
 # Development
 This version of CowLog is developed using HTML5 and Javascript using the
 [Electron](http://electron.atom.io/) framework.
@@ -89,5 +95,10 @@ The program uses the following components:
 
 * [jQuery](https://jquery.com/)
 * [Bootstrap](http://getbootstrap.com/)
+
+The development is hosted on Github
+[https://github.com/mpastell/CowLog](https://github.com/mpastell/CowLog)
+Contributors are welcome!
+
 
 [CowLog](http://cowlog.org) by Matti Pastell.
