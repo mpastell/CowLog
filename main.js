@@ -30,13 +30,14 @@ app.on('window-all-closed', function() {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 400, height: 850, icon: __dirname + '/almod.png'});
-
-    // and load the index.html of the app.
+    mainWindow = new BrowserWindow({width: 400, height: 850,
+            title : "CowLog",
+            icon: __dirname + '/almod.png'});
     mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
     //mainWindow.openDevTools();
 
     videoWin =  new BrowserWindow({ width: 600, height: 480,
+        title : "CowLog video",
         "auto-hide-menu-bar" : true,
         x :100, y :100,
         show : false
@@ -45,6 +46,7 @@ app.on('ready', function() {
     //videoWin.openDevTools();
 
     prefsWindow = new BrowserWindow({width: 500, height: 600,
+        title : "Project preferences",
         icon: __dirname + '/almod.png',
         show : false});
     prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_windows.html');
@@ -101,6 +103,7 @@ app.on('ready', function() {
         switch (win)
         {
             case "prefs":
+                //Clear form by reloading
                 prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_windows.html');
                 prefsWindow.show();
                 break;
@@ -108,6 +111,7 @@ app.on('ready', function() {
                 subjectWindow = new BrowserWindow({width: 400, height: 600,
                     icon: __dirname + '/almod.png',
                     "auto-hide-menu-bar" : true,
+                    "title" : "New subject",
                     show : true});
                 subjectWindow.loadUrl('file://' + __dirname + '/html/subject_window.html');
                 break;
@@ -115,6 +119,7 @@ app.on('ready', function() {
                 aboutWindow = new BrowserWindow(
                   {width: 500, height: 450,
                     "auto-hide-menu-bar" : true,
+                    "title" : "About CowLog",
                     icon: __dirname + '/almod.png'});
                 aboutWindow.loadUrl('file://' + __dirname + '/html/about.html');
                 break;
@@ -122,6 +127,7 @@ app.on('ready', function() {
                 helpWindow = new BrowserWindow(
                   {width: 500, height: 600,
                     "auto-hide-menu-bar" : true,
+                    title : "CowLog help",
                     icon: __dirname + '/almod.png'});
                  helpWindow.loadUrl('file://' + __dirname + '/html/help.html')
             default:
@@ -158,8 +164,8 @@ app.on('ready', function() {
     });
 
     ipc.on('edit-settings', function(event, arg) {
-        console.log("Editing settings")
-        var path = dialog.showOpenDialog({title : "Open project",
+        //console.log("Editing settings")
+        var path = dialog.showOpenDialog({title : "Choose project to edit",
             filters :
                 [{name : "CowLog project *.json", extensions : ["json"]}]
         });
@@ -176,6 +182,7 @@ app.on('ready', function() {
         mainWindow.webContents.send('main', arg);
     });
 
+    //Keep prefswindow in background unless app exits
     prefsWindow.on('close', function(e)
     {
         if (!exiting)
@@ -185,13 +192,24 @@ app.on('ready', function() {
         }
     });
 
+    function exitWindow(window)
+    {
+      if (window !== null)
+      {
+        window.close();
+        window = null;
+      }
+    }
+
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
         exiting = true;
-        videoWin.close();
-        videoWin = null;
-        prefsWindow.close();
-        prefsWindow = null;
+        exitWindow(videoWin);
+        exitWindow(prefsWindow);
+        exitWindow(subjectWindow);
+        exitWindow(aboutWindow);
+        exitWindow(helpWindow);
+
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
