@@ -109,7 +109,7 @@ ipc.on('current-subject', function(subject)
     var dstring = dt.toISOString();
     dstring = dstring.replace(/:/g ,"");
     dstring = dstring.replace("." ,"_");
-    dstring = dstring.replace(/T/g ,"");
+    dstring = dstring.replace(/Z/g ,"");
 
     console.log(dstring);
     currentSubject.file = path + "/" + currentSubject.name + "_" + dstring + ".csv";
