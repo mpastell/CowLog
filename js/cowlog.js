@@ -114,6 +114,18 @@ ipc.on('current-subject', function(subject)
     console.log(dstring);
     currentSubject.file = path + "/" + currentSubject.name + "_" + dstring + ".csv";
 
+    //Need to implement continuing for started coding.
+    //Prevent overwriting existing file for now
+    if (fs.existsSync(currentSubject.file))
+    {
+        dialog.showErrorBox("File exists", "The output file already exists,\
+please use a different subject name or move the existing file from project directory.\
+\n\nResuming coding of the same video will be implemented in the future");
+        currentSubject.file = null;
+        return;
+    }
+
+
     //Write metadata about session
     var metafile = path + "/metadata/" + currentSubject.name + "_" + dstring + ".json";
     var metadir = path + "/metadata/";

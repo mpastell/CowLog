@@ -216,6 +216,7 @@ app.on('ready', function() {
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
         exiting = true;
+
         exitWindow(videoWin);
         exitWindow(prefsWindow);
         exitWindow(subjectWindow);
