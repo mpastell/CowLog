@@ -1,6 +1,8 @@
 //Only the first video will return time...
 
 var ipc = require('ipc');
+var remote = require("remote");
+var dialog = remote.require("dialog");
 var ratio;
 //References to controls;
 var controls = {};
@@ -45,6 +47,13 @@ ipc.on('video', function(msg)
 
 var videoarray = [];
 
+//Catch errors from loading video!
+function videoerror()
+{
+    dialog.showErrorBox("Media error", "Can't play selected video format.\n\nSee documentation for information about supported video formats and converters.");
+    console.log("Caught video error!");
+}
+
 openVideos = function(files){
   var n = files.length;
   $("#videocontainer").html("");
@@ -54,7 +63,9 @@ openVideos = function(files){
   for (var i=0; i<n; i++)
   {
     var currentDiv = $("<div class='videoWindow'></div>").appendTo("#videocontainer");
-    videoarray[i] = $("<video id='video' class='player' width='100%'></video>").appendTo(currentDiv)[0];
+    videoarray[i] = $("<video id='video' class='player' onerror='videoerror()' \
+    width='100%'></video>"
+    ).appendTo(currentDiv)[0];
 
     if (i === 0)
     {

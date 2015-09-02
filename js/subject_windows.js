@@ -9,7 +9,7 @@ function chooseVideo(){
     {title : "Choose video(s)",
     properties: [ 'openFile', 'multiSelections' ],
     filters :
-    [{name : "Video files", extensions : ["mkv", "avi", "mp4", "ogg", "ogv"]},
+    [{name : "Video files", extensions : ["mkv", "avi", "mp4", "m4v", "ogg", "ogv"]},
     {name : "All files", extensions : ["*"]}]
     });
     //console.log(files)

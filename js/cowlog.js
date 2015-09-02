@@ -90,7 +90,7 @@ ipc.on('current-subject', function(subject)
       dt = new Date();
     }
     else {
-      dt = new Date(Date.parse(subject.datestring));
+      dt = new Date(Date.parse(subject.datestring + "Z"));
     }
     console.log(dt);
     console.log(dt.toISOString());
@@ -105,12 +105,28 @@ ipc.on('current-subject', function(subject)
       });
     }
 
+    //Date formatting
     var dstring = dt.toISOString();
-    dstring = dstring.split(":").join("");
-    dstring = dstring.replace(".","");
+    dstring = dstring.replace(/:/g ,"");
+    dstring = dstring.replace("." ,"_");
+    dstring = dstring.replace(/T/g ,"");
+
     console.log(dstring);
-    currentSubject.file = path + "/" +
-    currentSubject.name + "_" + dstring + ".csv";
+    currentSubject.file = path + "/" + currentSubject.name + "_" + dstring + ".csv";
+
+    //Write metadata about session
+    var metafile = path + "/metadata/" + currentSubject.name + "_" + dstring + ".json";
+    var metadir = path + "/metadata/";
+
+    if (!fs.existsSync(metadir))
+    {
+        fs.mkdirSync(metadir);
+    }
+
+    var meta = JSON.parse(JSON.stringify(currentSubject)); //Clone..
+    delete meta["results"];
+    var metadata = JSON.stringify(meta, null, " ");
+    fs.writeFileSync(metafile, metadata);
 });
 
 //Receive video metadata

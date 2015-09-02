@@ -192,6 +192,18 @@ app.on('ready', function() {
         }
     });
 
+    //Keep videowindow in background unless app exits
+    videoWin.on('close', function(e)
+    {
+        if (!exiting)
+        {
+            e.preventDefault();
+            videoWin.hide();
+        }
+    });
+
+
+
     function exitWindow(window)
     {
       if (window !== null)
