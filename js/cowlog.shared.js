@@ -33,6 +33,7 @@ cow.setDefaults = function()
 }
 //Keeping state of modifier buttons
 cow.currentCodes = [];
+cow.currentClasses = [];
 
 //Info about current subject
 var currentSubject =
@@ -99,6 +100,7 @@ function onCode(time){
 	    //pause until a code with no modifier is hit
 	    videoPause();
 	    cow.currentCodes[colIndex] = code;
+        cow.currentClasses[colIndex] = colIndex+1;
 	    $(sender).siblings().attr("disabled", "disabled");
 	    $(sender).attr("disabled", "disabled");
 	    //console.log("Has modifiers");
@@ -111,17 +113,27 @@ function onCode(time){
 	    prettyTime = Math.round(time*100)/100;
 
 	    cow.currentCodes[colIndex] = code;
+        cow.currentClasses[colIndex] = colIndex+1;
+
 	    //Remove extra indices from currentCodes
 	    cow.currentCodes = cow.currentCodes.slice(0, tdIndex);
+        cow.currentClasses = cow.currentClasses.slice(0, tdIndex);
 	    //remove active class from other cols
 	    //$("button.codeButton").removeClass("active");
 	    //console.log("No modifiers!");
-      code = cow.currentCodes.join(" ");
-	    currentSubject.results.push({"time" : time, "code" : code})
-	    $("#currentCode").html("<strong>Time:</strong> "
+
+        code = cow.currentCodes.join(" ");
+	    //currentSubject.results.push({"time" : time, "code" : code})
+	    for (var i=0; i < cow.currentCodes.length; i++)
+        {
+            currentSubject.results.push({"time" : time, "code" : cow.currentCodes[i],
+            "class" : cow.currentClasses[i]});
+        }
+
+        $("#currentCode").html("<strong>Time:</strong> "
           + prettyTime + " <strong>Code: </strong>" +  code);
 
-	    $("button.codeButton").removeAttr("disabled");
+	    $("button").removeAttr("disabled");
 	  }
   }
   //Write to file
@@ -133,34 +145,16 @@ function onCode(time){
 
 function writeCodes()
 {
-  var datastr = "";
   var res = currentSubject.results;
 
   //Add header
-  if (!projSettings.modifiers)
-  {
-    header = "time,code,class\n";
-  }
-  else
-  {
-    header = "time";
-  	for (var i=1; i <= projSettings.nClasses; i++)
-  	{
-  	    header += ",class" + i;
-  	}
-  	header += "\n";
-  }
-
-  datastr += header;
+  var datastr = "time,code,class\n";
 
   for (var i=0; i < res.length; i++)
   {
-    datastr += res[i]["time"] + "," + res[i]["code"];
-    if (!projSettings.modifiers)
-    {
-      datastr += "," + res[i]["class"];
-    }
-    datastr += "\n";
+    datastr += res[i]["time"] + "," + res[i]["code"] +
+            "," + res[i]["class"] +
+            "\n";
   }
 
   fs.writeFileSync(currentSubject.file, datastr);
