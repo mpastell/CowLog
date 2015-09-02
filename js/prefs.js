@@ -237,7 +237,7 @@ function loadSettings(config)
 
     if (config.modifiers)
     {
-	     $("#modifiedClasses").val(modifierArray.join(","));
+	     $("#modifiedClasses").val(config.modifiedCodes.join(","));
     }
 
     //If config has keyboard shortcuts defined
