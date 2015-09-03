@@ -36,13 +36,21 @@
 <div id="content" class="container">
     <div style="margin-top:20px;"></div>
     <div class="row">
-      <div class="col-md-12">
-            <p>
-              <button id="newSubject" class="btn btn-block btn-success" onclick="openVideo()" class="topButton">New subject</button>
 
-              <div id="timeIndicator" style="text-align :center; margin-top:10px; margin-bottom:10px;">
+    <div class="col-xs-6">
+        <button id="newSubject" class="btn btn-block btn-success" onclick="openVideo()" class="topButton">New subject</button>
+    </div>
+    <div class="col-xs-6">
+        <button id="continueSubject" class="btn btn-block btn-success" onclick="continueVideo(true)" class="topButton">Continue coding</button>
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-12" style="margin-top:20px; margin-bottom:10px;">
+            <div id="timeIndicator" style="text-align:center;">
                   <span id="currentTime">0</span> / <span id="videoLength">0 s</div>
               <div id="timeSlider" style="margin-top:10px; margin-bottom:10px;"></div>
+
 
         <div class="input-group">
             <input type="text" class="form-control" id="speed" title="Video playback rate as number">

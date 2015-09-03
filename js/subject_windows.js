@@ -30,8 +30,8 @@ function openVideo()
 
     console.log(currentSubject);
 
-    ipc.send('openvideos', files);
     ipc.send('current-subject', currentSubject);
+    ipc.send('openvideos', files);
     ipc.send('hide-window', 'subject')
 }
 

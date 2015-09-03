@@ -51,6 +51,7 @@ app.on('ready', function() {
         show : false});
     prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_windows.html');
 
+
     //prefsWindow.openDevTools();
 
     //For development quick access

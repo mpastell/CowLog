@@ -6,7 +6,8 @@
  occasionally need to which version we are using
  */
 var ipc = require('ipc');
-var fs = require('fs');
+var fs = remote.require('fs');
+var path = remote.require('path');
 
 cow.videoVersion = true;
 cow.liveVersion = false;
@@ -77,6 +78,50 @@ function openVideo(evt){
     $("#currentCode").html("");
 }
 
+function continueVideo(showDialog)
+{
+
+    var cpath = null;
+    //Function can be called from GUI (showDialog=true, or new subject)
+    if (showDialog){
+        cpath = dialog.showOpenDialog({properties : ["openFile"],
+                                defaultPath : projSettings.dataDirectory + "/",
+                                title : "Choose coding file to continue",
+                                filters : [{name : "CowLog code file *.csv", extensions : ["csv"]}]
+                            });
+    } else {
+        cpath = [currentSubject.file];
+    }
+
+    //Get metadata path
+    var metafile = path.basename(cpath).replace(".csv", ".json");
+    var meta_path = path.dirname(cpath) + "/metadata/" + metafile;
+
+    //Read metadata
+    currentSubject = JSON.parse(fs.readFileSync(meta_path, {encoding : "utf-8"}));
+    //Just in case files a copied to a different path
+    currentSubject.file = cpath[0];
+
+    var rawdata = fs.readFileSync(cpath[0], {encoding : "utf-8"});
+    var datarows = rawdata.split("\n");
+    var row = null;
+
+    currentSubject.results = [];
+    var n = datarows.length
+    for (var i=1; i < n-1; i++)
+    {
+        row = datarows[i].split(",");
+        currentSubject.results.push({"time" : parseFloat(row[0]), "code" : row[1],
+           "class" : row[2]});
+    }
+
+
+    ipc.send('openvideos', currentSubject.videos);
+
+    //videoSetTime(last["time"]);
+};
+
+
 ipc.on('current-subject', function(subject)
 {
     //console.log(subject);
@@ -95,11 +140,11 @@ ipc.on('current-subject', function(subject)
     console.log(dt);
     console.log(dt.toISOString());
 
-    var path = projSettings.dataDirectory;
+    var spath = projSettings.dataDirectory;
 
-    if (path === null)
+    if (spath === null)
     {
-        path = dialog.showOpenDialog({
+        spath = dialog.showOpenDialog({
         properties : ['openDirectory'],
         title : "Choose output directory"
       });
@@ -112,23 +157,26 @@ ipc.on('current-subject', function(subject)
     dstring = dstring.replace(/Z/g ,"");
 
     console.log(dstring);
-    currentSubject.file = path + "/" + currentSubject.name + "_" + dstring + ".csv";
+    currentSubject.file = spath + "/" + currentSubject.name + "_" + dstring + ".csv";
 
-    //Need to implement continuing for started coding.
-    //Prevent overwriting existing file for now
+    //Continue coding
     if (fs.existsSync(currentSubject.file))
     {
-        dialog.showErrorBox("File exists", "The output file already exists,\
-please use a different subject name or move the existing file from project directory.\
-\n\nResuming coding of the same video will be implemented in the future");
-        currentSubject.file = null;
+        //Continue existing session
+        continueVideo(false);
+
+        dialog.showMessageBox({
+            title : "Continuing existing session",
+            buttons : ["OK"],
+            detail : "A data file for this subject and time already exists. Continuing session",
+            type : "info"
+        });
         return;
     }
 
-
     //Write metadata about session
-    var metafile = path + "/metadata/" + currentSubject.name + "_" + dstring + ".json";
-    var metadir = path + "/metadata/";
+    var metafile = spath + "/metadata/" + currentSubject.name + "_" + dstring + ".json";
+    var metadir = spath + "/metadata/";
 
     if (!fs.existsSync(metadir))
     {
@@ -146,6 +194,17 @@ ipc.on("metadata", function(metadata){
     currentVideo.duration = metadata["duration"];
     $( "#timeSlider" ).slider( "option", "max", currentVideo.duration);
     controls.videolength.html(Math.round(currentVideo.duration) + " s");
+
+    //Continue coding
+    var n = currentSubject.results.length;
+    if (n > 1)
+    {
+        var last = currentSubject.results[n-1];
+        videoSetTime(last["time"]);
+        $("#currentCode").html("<strong>Time:</strong> " +
+            Math.round(last["time"]*100)/100 +
+            " <strong>Code: </strong>" + last["code"] + "<BR/>");
+    }
 });
 
 //Receive video time for slider
