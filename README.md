@@ -12,12 +12,19 @@ The program uses the following frameworks:
 * [jQuery](https://jquery.com/)
 * [Bootstrap](http://getbootstrap.com/)
 
-## Run application
+## Get the release
 
-First install [Electron](http://electron.atom.io/). Then you can run
-the application using:
+If you want to use CowLog for your research can download most recent [release](https://github.com/mpastell/CowLog/releases) binary for your platform.
+
+## Run most recent version from this repository
+
+If you want to use the most recent version from this repository e.g. for
+contributing code you need to first  install [Electron](http://electron.atom.io/).
+Then you can run the application using:
 
 ```
 git clone https://github.com/mpastell/CowLog.git
 electron CowLog
 ```
+
+If you want to modify the source I suggest you read the Electron documentation first.
