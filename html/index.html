@@ -29,8 +29,8 @@
     <style>
       td {
         padding-top: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
+        padding-left: 2px;
+        padding-right: 2px;
         vertical-align : top;
       }
     </style>
@@ -39,7 +39,7 @@
 <body>
 
 <div id="content" class="container">
-    <div style="margin-top:20px;"></div>
+    <div style="margin-top:10px;"></div>
     <div class="row">
 
     <div class="col-xs-6">
@@ -51,20 +51,33 @@
     </div>
 
     <div class="row">
-    <div class="col-md-12" style="margin-top:20px; margin-bottom:10px;">
+      <div class="col-md-12" style="margin-top:10px; margin-bottom:10px;">
             <div id="timeIndicator" style="text-align:center;">
                   <span id="currentTime">0</span> / <span id="videoLength">0 s</div>
               <div id="timeSlider" style="margin-top:10px; margin-bottom:10px;"></div>
-
-
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
         <div class="input-group">
             <input type="text" class="form-control" id="speed" title="Video playback rate as number">
             <span class="input-group-btn">
               <button onclick="setSpeed()" class="btn btn-default btn-info">Set speed</button>
             </span>
         </div>
+      </div>
+
+        <div class="col-xs-6">
+            <div class="input-group">
+                <input type="text" class="form-control" id="jumpInput" title="Video position (s)">
+                <span class="input-group-btn">
+                  <button onclick="jumpToInput()" class="btn btn-default btn-info">Jump to</button>
+                </span>
+            </div>
+        </div>
     </div>
-  </div>
+
+
 
         <!-- <div id="col1" class="buttons"> -->
 
@@ -159,6 +172,7 @@
 
     <div class="row col-md-12" style="margin-top:10px; margin-bottom : 10px;">
       <button id="endSubject" class="btn btn-block btn-danger" onclick="code(this)">End coding</button>
+    </div>
     </div>
   </div>
 </body>

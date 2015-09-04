@@ -213,6 +213,13 @@ ipc.on("timer", function(time){
     controls.timeindicator.html(time);
 });
 
+//
+function jumpToInput()
+{
+  videoSetTime(parseFloat($("#jumpInput").val()));
+}
+
+
 //Video control for the whole array of videos
 function videoPlay()
 {
