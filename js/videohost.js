@@ -6,7 +6,7 @@ var dialog = remote.require("dialog");
 var ratio;
 //References to controls;
 var controls = {};
-
+var ncols = "Auto";
 
 ipc.on('openvideos', function(files)
 {
@@ -56,16 +56,27 @@ function videoerror()
 
 openVideos = function(files){
   var n = files.length;
-  $("#videocontainer").html("");
-  var n = files.length;
+  $("#videocontainer").empty();
+  $("#droplist").empty();
 
+  if (n>1)
+  {
+    $("#colSelect").show();
+    $("<li><a href='#' onclick='setCols(this);return false;'>Auto</a></li>").appendTo("#droplist");
+  }
+  else {
+    $("#colSelect").hide();
+  }
+
+  var n = files.length;
 
   for (var i=0; i<n; i++)
   {
-    var currentDiv = $("<div class='videoWindow'></div>").appendTo("#videocontainer");
-    videoarray[i] = $("<video id='video' class='player' onerror='videoerror()' \
-    width='100%'></video>"
-    ).appendTo(currentDiv)[0];
+    //var currentDiv = $("<div class='videoWindow'></div>").appendTo("#videocontainer");
+    //videoarray[i] = $("<video id='video' class='player' onerror='videoerror()' \
+    //width='49%'></video>"
+    //).appendTo(currentDiv)[0];
+    videoarray[i] = $("<video id='video' class='player' onerror='videoerror()'></video>").appendTo("#videocontainer")[0];
 
     if (i === 0)
     {
@@ -75,11 +86,47 @@ openVideos = function(files){
           }, false);
     }
 
-    //var videoURL = window.URL.createObjectURL(files[i]);
+    if (n>1){
+      $("<li><a href='#' onclick='setCols(this);return false;'>" + (i+1) + "</a></li>").appendTo("#droplist");
+    }
+
+    $(videoarray[i]).width("100%");
     videoarray[i].src = files[i];
     $(videoarray[i]).data("index", i);
+    setVideoSize();
   }
 }
+
+//Resize videos based on window size
+$( window ).resize(function() {
+  console.log("resized");
+  setVideoSize();
+});
+
+function setCols(sender)
+{
+  ncols = $(sender).text();
+  setVideoSize();
+}
+
+//Set video width based on the number of videos and
+//aspect ratio
+function setVideoSize()
+{
+  var n = videoarray.length;
+  var cols = null;
+  if (n > 0){
+    if (ncols==="Auto"){
+    //Use sqrt of n
+      cols = Math.min(n, Math.round(Math.sqrt(n)));
+    } else {
+      var cols = parseInt(ncols);
+    }
+    var vw = 100/(cols);
+    $("video").width(vw + "%");
+  }
+}
+
 
 //Video control for the whole array of videos
 function videoPlay()

@@ -3,18 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>CowLog video</title>
-    <script src="../js/jquery-1.7.2.min.js"></script>
+
+
+    <!-- <script src="../js/jquery-1.7.2.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.5/css/bootstrap.min.css" media="screen"/>
     <style type="text/css">
         body {margin :0;
             border: 0;
         padding: 0}
     </style>
+
 </head>
 <body>
+  <!-- Select how videos are displayed -->
+  <div class="dropdown" style="margin-bottom : 1px;">
+    <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="colSelect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+      Set number of columns:<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="colSelect" id="droplist">
+    </ul>
+  </div>
 
-<div id="videocontainer">
-</div>
 
+
+<div id="videocontainer"></div>
+
+<script>
+window.$ = window.jQuery = require('../js/jquery-2.1.4.min.js');
+</script>
+
+<script scr="../js/jquery-migrate-1.2.1.min.js"></script>
+<script src="bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="../js/videohost.js"></script>
 </body>
 </html>

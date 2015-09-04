@@ -34,7 +34,7 @@ app.on('ready', function() {
             title : "CowLog",
             icon: __dirname + '/almod.png'});
     mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
-    //mainWindow.openDevTools();
+    mainWindow.openDevTools();
 
     videoWin =  new BrowserWindow({ width: 600, height: 480,
         title : "CowLog video",
@@ -43,7 +43,7 @@ app.on('ready', function() {
         show : false
     });
     videoWin.loadUrl('file://' + __dirname + '/html/videowindow_multi.html');
-    //videoWin.openDevTools();
+    videoWin.openDevTools();
 
     prefsWindow = new BrowserWindow({width: 500, height: 600,
         title : "Project preferences",
