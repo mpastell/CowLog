@@ -1,6 +1,11 @@
 
 var wjs = require("wcjs-player");
 
+//Start with defaults, that are fixed once video starts playing
+var videoWidth = 320;
+var videoHeight = 240;
+var videoAratio = 4/3;
+
 //Catch errors from loading video!
 function videoerror()
 {
@@ -26,41 +31,34 @@ openVideos = function(files){
 
   for (var i=0; i<n; i++)
   {
-    //var currentDiv = $("<div class='videoWindow'></div>").appendTo("#videocontainer");
-    //videoarray[i] = $("<video id='video' class='player' onerror='videoerror()' \
-    //width='49%'></video>"
-    //).appendTo(currentDiv)[0];
-    //videoarray[i] = $("<video id='video' class='player' onerror='videoerror()'></video>").appendTo("#videocontainer")[0];
-    //videoarray[i] =clearCanvas(): draws a single black frame on the canvas, should be used after stopping the player and/or when the media file has changes (otherwise the frame from
-    $("<div id='player" + i + "' onerror='videoerror()'></div>").appendTo("#videocontainer")[0];
+    $("<div id='player" + i + "'></div>").appendTo("#videocontainer")[0];
     videoarray[i] = new wjs(("#player" + i)).addPlayer({autoplay : false, multiscreen: true});
-    //console.log(files[i]);
+    videoarray[i].onError(videoerror);
     videoarray[i].addPlaylist("file://" + files[i]);
-    //videoarray[i].addPlaylist("file:///home/mpastell/Videos/movie.ogv");
-    videoarray[i].play();
 
-    //if (i === 0)
-    //{
-    //    videoarray[0].addEventListener('loadeddata', function() {
-    //      console.log(videoarray[0].duration);
-    //      ipc.send("metadata", {duration : videoarray[0].duration})
-    //      }, false);
-    //}
+    if (i === 0)
+    {
+        videoarray[0].onFrameSetup(function() {
+          //videoarray[0].pause();
+          //console.log(videoarray[0].length()/1000);
+          ipc.send("metadata", {duration : videoarray[0].length()/1000});
+          videoWidth = videoarray[0].width();
+          videoHeight = videoarray[0].height();
+          videoAratio = videoWidth/videoHeight;
+          setVideoSize();
+          });
+          //videoarray[0].play()
+    }
 
     if (n>1){
       $("<li><a href='#' onclick='setCols(this);return false;'>" + (i+1) + "</a></li>").appendTo("#droplist");
     }
-
-    //$(videoarray[i]).width("100%");
-    //videoarray[i].src = files[i];
     //$(videoarray[i]).data("index", i);
-    //setVideoSize();
   }
 }
 
 //Resize videos based on window size
 $( window ).resize(function() {
-  console.log("resized");
   setVideoSize();
 });
 
@@ -85,6 +83,10 @@ function setVideoSize()
     }
     var vw = 100/(cols);
     $(".webchimeras").width(vw + "%");
+    var vh = (window.innerWidth/cols)/videoAratio;
+    //$(".webchimeras").width(vw);
+    console.log(videoAratio);
+    $(".webchimeras").height(vh);
   }
 }
 
@@ -116,17 +118,17 @@ function videoPause()
 function videoSeekBy(amount)
 {
     videoarray.forEach(function(video){
-	     video.currentTime = video.currentTime + amount;
+	     video.time(video.time() + amount*1000);
     });
-    ipc.send("timer", video.currentTime);
+    ipc.send("timer", video.time()/1000);
 }
 
 function videoSeekTo(time)
 {
     videoarray.forEach(function(video){
-	     video.currentTime = time;
+	     video.time(time*1000);
     });
-    ipc.send("timer", video.currentTime);
+    ipc.send("timer", videoarray[0].time()/1000);
 }
 
 
@@ -134,7 +136,8 @@ function videoStop()
 {
     videoarray.forEach(function(video){
 	     video.pause();
-       video.currentTime = 0;
+         video.time(0);
+         //video.stop();
     });
     controls.timer = clearInterval(controls.timer);
 }
@@ -142,12 +145,16 @@ function videoStop()
 //Get time only for the first video, because we can anyway use only one time code
 function videoCurrentTime()
 {
-    return(Math.round(videoarray[0].currentTime*100)/100);
+    return(Math.round(videoarray[0].time()/100)/10);
 }
 
 function setSpeed(speed)
 {
     videoarray.forEach(function(video){
-	     video.playbackRate = speed;
+	     video.rate(speed);
     });
+}
+
+function getCodeTime(){
+    return(videoarray[0].time()/1000)
 }

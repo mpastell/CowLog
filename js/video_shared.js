@@ -36,7 +36,7 @@ ipc.on('video', function(msg)
       setSpeed(val);
       break;
     case "getTime":
-      ipc.send("time", videoarray[0].currentTime); //Send time for behavior codes
+      ipc.send("time", getCodeTime()); //Send time for behavior codes
       break;
     default:
       console.log("Default");

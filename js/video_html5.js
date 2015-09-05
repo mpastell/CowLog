@@ -142,3 +142,7 @@ function setSpeed(speed)
 	     video.playbackRate = speed;
     });
 }
+
+function getCodeTime(){
+    return(videoarray[0].currentTime)
+}
