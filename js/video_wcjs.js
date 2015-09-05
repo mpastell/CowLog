@@ -39,7 +39,7 @@ openVideos = function(files){
     if (i === 0)
     {
         videoarray[0].onFrameSetup(function() {
-          //videoarray[0].pause();
+          videoarray[0].pause();
           //console.log(videoarray[0].length()/1000);
           ipc.send("metadata", {duration : videoarray[0].length()/1000});
           videoWidth = videoarray[0].width();
@@ -47,14 +47,21 @@ openVideos = function(files){
           videoAratio = videoWidth/videoHeight;
           setVideoSize();
           });
-          //videoarray[0].play()
+    }else {
+        videoarray[i].onFrameSetup(function()
+        {
+            videoPause();
+        });
     }
+
 
     if (n>1){
       $("<li><a href='#' onclick='setCols(this);return false;'>" + (i+1) + "</a></li>").appendTo("#droplist");
     }
     //$(videoarray[i]).data("index", i);
   }
+  videoPlay();
+  //setVideoSize();
 }
 
 //Resize videos based on window size
@@ -120,7 +127,7 @@ function videoSeekBy(amount)
     videoarray.forEach(function(video){
 	     video.time(video.time() + amount*1000);
     });
-    ipc.send("timer", video.time()/1000);
+    ipc.send("timer", videoCurrentTime());
 }
 
 function videoSeekTo(time)
