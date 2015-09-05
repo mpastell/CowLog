@@ -1,51 +1,5 @@
-//Only the first video will return time...
 
-var ipc = require('ipc');
-var remote = require("remote");
-var dialog = remote.require("dialog");
-var ratio;
-//References to controls;
-var controls = {};
-var ncols = "Auto";
-
-ipc.on('openvideos', function(files)
-{
-  openVideos(files);
-});
-
-//Video player control
-ipc.on('video', function(msg)
-{
-  var cmd = msg["cmd"];
-  var val = msg["val"];
-  switch (cmd) {
-    case "play":
-      videoPlay();
-      break;
-    case "pause":
-      videoPause();
-      break;
-    case "stop":
-      videoStop();
-      break;
-    case "seekBy":
-      videoSeekBy(val);
-      break;
-    case "seekTo":
-      videoSeekTo(val);
-      break;
-    case "setSpeed":
-      setSpeed(val);
-      break;
-    case "getTime":
-      ipc.send("time", videoarray[0].currentTime); //Send time for behavior codes
-      break;
-    default:
-      console.log("Default");
-  }
-});
-
-var videoarray = [];
+var wjs = require("wcjs-player");
 
 //Catch errors from loading video!
 function videoerror()
@@ -76,24 +30,31 @@ openVideos = function(files){
     //videoarray[i] = $("<video id='video' class='player' onerror='videoerror()' \
     //width='49%'></video>"
     //).appendTo(currentDiv)[0];
-    videoarray[i] = $("<video id='video' class='player' onerror='videoerror()'></video>").appendTo("#videocontainer")[0];
+    //videoarray[i] = $("<video id='video' class='player' onerror='videoerror()'></video>").appendTo("#videocontainer")[0];
+    //videoarray[i] =clearCanvas(): draws a single black frame on the canvas, should be used after stopping the player and/or when the media file has changes (otherwise the frame from
+    $("<div id='player" + i + "' onerror='videoerror()'></div>").appendTo("#videocontainer")[0];
+    videoarray[i] = new wjs(("#player" + i)).addPlayer({autoplay : false, multiscreen: true});
+    //console.log(files[i]);
+    videoarray[i].addPlaylist("file://" + files[i]);
+    //videoarray[i].addPlaylist("file:///home/mpastell/Videos/movie.ogv");
+    videoarray[i].play();
 
-    if (i === 0)
-    {
-        videoarray[0].addEventListener('loadeddata', function() {
-          console.log(videoarray[0].duration);
-          ipc.send("metadata", {duration : videoarray[0].duration})
-          }, false);
-    }
+    //if (i === 0)
+    //{
+    //    videoarray[0].addEventListener('loadeddata', function() {
+    //      console.log(videoarray[0].duration);
+    //      ipc.send("metadata", {duration : videoarray[0].duration})
+    //      }, false);
+    //}
 
     if (n>1){
       $("<li><a href='#' onclick='setCols(this);return false;'>" + (i+1) + "</a></li>").appendTo("#droplist");
     }
 
-    $(videoarray[i]).width("100%");
-    videoarray[i].src = files[i];
-    $(videoarray[i]).data("index", i);
-    setVideoSize();
+    //$(videoarray[i]).width("100%");
+    //videoarray[i].src = files[i];
+    //$(videoarray[i]).data("index", i);
+    //setVideoSize();
   }
 }
 
@@ -123,7 +84,7 @@ function setVideoSize()
       var cols = parseInt(ncols);
     }
     var vw = 100/(cols);
-    $("video").width(vw + "%");
+    $(".webchimeras").width(vw + "%");
   }
 }
 

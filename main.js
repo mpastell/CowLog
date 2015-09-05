@@ -36,14 +36,15 @@ app.on('ready', function() {
     mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
     //mainWindow.openDevTools();
 
-    videoWin =  new BrowserWindow({ width: 600, height: 480,
+    videoWin =  new BrowserWindow({ width: 600, height: 600,
         title : "CowLog video",
         "auto-hide-menu-bar" : true,
         x :100, y :100,
         show : false
     });
-    videoWin.loadUrl('file://' + __dirname + '/html/videowindow_multi.html');
-    //videoWin.openDevTools();
+    //videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
+    videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
+    videoWin.openDevTools();
 
     prefsWindow = new BrowserWindow({width: 500, height: 600,
         title : "Project preferences",
