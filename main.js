@@ -47,14 +47,14 @@ app.on('ready', function() {
     });
     videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
     //videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
-    videoWin.openDevTools();
+    //videoWin.openDevTools();
 
     prefsWindow = new BrowserWindow({width: 500, height: 600,
         title : "Project preferences",
         icon: __dirname + '/almod.png',
-        show : true});
+        show : false});
     prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_window.html');
-    prefsWindow.openDevTools({detach : true});
+    //prefsWindow.openDevTools({detach : true});
 
     //For development quick access
     //subjectWindow = new BrowserWindow({width: 400, height: 500,
