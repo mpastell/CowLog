@@ -32,7 +32,7 @@ openVideos = function(files){
   for (var i=0; i<n; i++)
   {
     $("<div id='player" + i + "'></div>").appendTo("#videocontainer")[0];
-    videoarray[i] = new wjs(("#player" + i)).addPlayer({autoplay : false, multiscreen: true});
+    videoarray[i] = new wjs(("#player" + i)).addPlayer({autoplay : false, multiscreen: true, allowFullscreen : false});
     videoarray[i].onError(videoerror);
     videoarray[i].addPlaylist("file://" + files[i]);
 
