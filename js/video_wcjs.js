@@ -35,7 +35,17 @@ openVideos = function(files){
     $("<div id='player" + i + "'></div>").appendTo("#videocontainer")[0];
     videoarray[i] = new wjs(("#player" + i)).addPlayer({autoplay : false, multiscreen: true, allowFullscreen : false});
     videoarray[i].onError(videoerror);
-    videoarray[i].addPlaylist("file://" + files[i]);
+
+    //Set file url for vlc on windows
+    if (files[i].indexOf("\\") > -1)
+    {
+      fpath = "/" + files[i].replace(/\\/g, "/");
+    }
+    else {
+      fpath = files[i];
+    }
+    videoarray[i].addPlaylist("file://" + fpath);
+    
     videoarray[i].find(".wcp-surface").unbind("click").unbind("dblclick").css("cursor","default","important");
 
     if (i === 0)

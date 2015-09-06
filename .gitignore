@@ -1,4 +1,5 @@
 .idea
-node_modules/webchimera.js/
-node_modules/wcjs-renderer/
-node_modules/wcjs-player/node_modules/
+*.dll
+*.exe
+plugins/
+node_modules/
