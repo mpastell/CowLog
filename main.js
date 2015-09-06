@@ -17,6 +17,9 @@ var aboutWindow = null;
 var helpWindow = null;
 var exiting = false;
 
+//Runtime variables
+var projSettings = null;
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
     // On OS X it is common for applications and their menu bar
@@ -42,18 +45,16 @@ app.on('ready', function() {
         x :100, y :100,
         show : false
     });
-    //videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
-    videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
+    videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
+    //videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
     videoWin.openDevTools();
 
     prefsWindow = new BrowserWindow({width: 500, height: 600,
         title : "Project preferences",
         icon: __dirname + '/almod.png',
-        show : false});
-    prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_windows.html');
-
-
-    //prefsWindow.openDevTools();
+        show : true});
+    prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_window.html');
+    prefsWindow.openDevTools({detach : true});
 
     //For development quick access
     //subjectWindow = new BrowserWindow({width: 400, height: 500,
@@ -97,6 +98,16 @@ app.on('ready', function() {
 
     //Settings saved from prefs window to main
     ipc.on('project-settings', function(event, arg) {
+        projSettings = arg;
+
+        if (projSettings.videoplayer === "vlc")
+        {
+            videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
+        }
+        else {
+            videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
+        }
+
         mainWindow.webContents.send('project-settings', arg);
     });
 
@@ -106,7 +117,7 @@ app.on('ready', function() {
         {
             case "prefs":
                 //Clear form by reloading
-                prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_windows.html');
+                prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_window.html');
                 prefsWindow.show();
                 break;
             case "subject":
@@ -160,7 +171,16 @@ app.on('ready', function() {
 
         var text = fs.readFileSync(path[0], encoding="utf-8");
 
-        var projSettings = JSON.parse(text);
+        projSettings = JSON.parse(text);
+
+        if (projSettings.videoplayer === "vlc")
+        {
+            videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
+        }
+        else {
+            videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
+        }
+
         mainWindow.webContents.send('project-settings', projSettings);
         //prefsWindow.webContents.send('project-settings', projSettings);
     });

@@ -134,14 +134,15 @@ function storeSettings()
 	     modifierArray = $("#modifiedClasses").val().split(',');
     }
 
-   //Save setting to localStorage
+   //Read settings from form
     projSettings =
 	  {
 	    name : $("#projName").val(),
 	    //videoDirectory : $("#videoDir").val(), //Not used, could be added back
-      dataDirectory : $("#dataDir").val(),
+        dataDirectory : $("#dataDir").val(),
 	    author : $("#Author").val(),
 	    email : $("#email").val(),
+        videoplayer : $('input[name=playerRadio]:checked').val(),
 	    nClasses : parseInt($("#nClasses").val()),
 	    modifiers : modifiers,
 	    codes : csvArray,
@@ -212,6 +213,7 @@ function loadSettings(config)
     $("#projName").val(config.name);
     $("#Author").val(config.author);
     $("#email").val(config.email);
+    $('input[name=playerRadio]').val([config.videoplayer]);
     //$("#videoDir").val(config.videoDirectory);
     $("#dataDir").val(config.dataDirectory);
     $("#nClasses").val(config.nClasses);
