@@ -40,7 +40,6 @@ openVideos = function(files){
     if (i === 0)
     {
         videoarray[0].onFrameSetup(function() {
-          videoarray[0].pause();
           //console.log(videoarray[0].length()/1000);
           videoDuration = videoarray[0].length()/1000;
           ipc.send("metadata", {duration : videoarray[0].length()/1000});
@@ -49,10 +48,12 @@ openVideos = function(files){
           videoAratio = videoWidth/videoHeight;
           setVideoSize();
           });
-    }else {
-        videoarray[i].onFrameSetup(function()
+    }
+    if (i === (n-1))
+    {
+        videoarray[n-1].onFrameSetup(function()
         {
-            videoPause();
+            setTimeout(initVideo, 100);
         });
     }
 
@@ -65,6 +66,13 @@ openVideos = function(files){
   videoPlay();
   //setVideoSize();
 }
+
+function initVideo()
+{
+    videoPause();
+    videoSeekTo(0);
+}
+
 
 //Resize videos based on window size
 $( window ).resize(function() {
