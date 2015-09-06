@@ -165,7 +165,7 @@ function setSpeed(speed)
 }
 
 function getCodeTime(){
-    if video.state() === "ended"
+    if (videoarray[0].state() === "stopping")
     {
         return(videoDuration);
     }
