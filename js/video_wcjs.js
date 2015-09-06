@@ -5,6 +5,7 @@ var wjs = require("wcjs-player");
 var videoWidth = 320;
 var videoHeight = 240;
 var videoAratio = 4/3;
+var videoDuration = null;
 
 //Catch errors from loading video!
 function videoerror()
@@ -41,6 +42,7 @@ openVideos = function(files){
         videoarray[0].onFrameSetup(function() {
           videoarray[0].pause();
           //console.log(videoarray[0].length()/1000);
+          videoDuration = videoarray[0].length()/1000;
           ipc.send("metadata", {duration : videoarray[0].length()/1000});
           videoWidth = videoarray[0].width();
           videoHeight = videoarray[0].height();
@@ -163,5 +165,11 @@ function setSpeed(speed)
 }
 
 function getCodeTime(){
-    return(videoarray[0].time()/1000)
+    if video.state() === "ended"
+    {
+        return(videoDuration);
+    }
+    else {
+        return(videoarray[0].time()/1000);
+    }
 }
