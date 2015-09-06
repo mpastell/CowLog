@@ -36,6 +36,7 @@ openVideos = function(files){
     videoarray[i] = new wjs(("#player" + i)).addPlayer({autoplay : false, multiscreen: true, allowFullscreen : false});
     videoarray[i].onError(videoerror);
     videoarray[i].addPlaylist("file://" + files[i]);
+    videoarray[i].find(".wcp-surface").unbind("click").unbind("dblclick").css("cursor","default","important");
 
     if (i === 0)
     {
