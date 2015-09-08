@@ -2,4 +2,4 @@
 *.dll
 *.exe
 plugins/
-node_modules/
+node_modules/webchimera.js/build
