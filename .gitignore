@@ -3,3 +3,4 @@
 *.exe
 plugins/
 node_modules/webchimera.js/build
+.DS_Store

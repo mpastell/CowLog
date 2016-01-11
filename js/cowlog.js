@@ -68,6 +68,14 @@ $(document).ready(function(){
     $(window).resize(resizeDivs);
     $("#buttoncontainer").resize(resizeDivs);
     //$("a.toggleParagraph").click(toggleParagraph);
+
+    //Keyboard shortcuts
+    //$(document).bind('keydown', 'ctrl+p', function(){$("#pauseButton").click() });
+    $(document).bind('keydown', 'ctrl+p', videoPause);
+    $(document).bind('keydown', 'left', videoBack);
+    $(document).bind('keydown', 'right', videoFwd)
+
+
 });
 
 //New subject dialog

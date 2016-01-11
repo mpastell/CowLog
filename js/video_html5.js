@@ -99,9 +99,15 @@ function videoPlay()
 function videoPause()
 {
     videoarray.forEach(function(video)
-		       {video.pause();
-		       });
-    controls.timer = clearInterval(controls.timer);
+		       {
+             if (video.paused)
+             {
+               video.play();
+             } else {
+               video.pause();
+               controls.timer = clearInterval(controls.timer);
+             }
+           });
 }
 
 function videoSeekBy(amount)

@@ -45,7 +45,7 @@ openVideos = function(files){
       fpath = files[i];
     }
     videoarray[i].addPlaylist("file://" + fpath);
-    
+
     videoarray[i].find(".wcp-surface").unbind("click").unbind("dblclick").css("cursor","default","important");
 
     if (i === 0)
@@ -137,10 +137,18 @@ function videoPlay()
 
 function videoPause()
 {
-    videoarray.forEach(function(video)
-		       {video.pause();
-		       });
-    controls.timer = clearInterval(controls.timer);
+
+  videoarray.forEach(function(video)
+  {
+    if (video.state() === "paused")
+    {
+      video.play();
+    } else {
+      video.pause();
+      //console.log(video.state())
+      controls.timer = clearInterval(controls.timer);
+    }
+  });
 }
 
 function videoSeekBy(amount)
