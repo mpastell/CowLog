@@ -7,8 +7,9 @@ This repository contains the new desktop branch CowLog 3 of the software based o
 
 See [this](http://cowlog.org/cowlog3) about testing CowLog 3 beta.
 
-The program uses the following frameworks:
+The program uses the following frameworks and libraries:
 
+* [WebChimera.js](https://github.com/RSATom/WebChimera.js)
 * [jQuery](https://jquery.com/)
 * [Bootstrap](http://getbootstrap.com/)
 
