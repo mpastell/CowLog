@@ -1,6 +1,11 @@
 {
   "name"    : "CowLog",
-  "version" : "3.0.0b",
+  "version" : "3.0.0b2",
+  "license" : "GPL",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mpastell/CowLog"
+  },
   "main"    : "main.js",
   "dependencies": {
     "wcjs-player": "*"
