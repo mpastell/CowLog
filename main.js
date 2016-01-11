@@ -24,9 +24,9 @@ var projSettings = null;
 app.on('window-all-closed', function() {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform != 'darwin') {
+    //if (process.platform != 'darwin') {
         app.quit();
-    }
+    //}
 });
 
 // This method will be called when Electron has finished
@@ -45,8 +45,19 @@ app.on('ready', function() {
         x :100, y :100,
         show : false
     });
-    //videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
-    videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
+
+    //If webchimera.js loads use it as default, otherwise use HTML5
+    try
+    {
+      var wcjs = require("webchimera.js");
+      videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
+    } catch(e)
+    {
+        console.log('ERROR loading webchimera.js module\n', e);
+        console.log('Using HTML5 player');
+        videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
+    }
+
     //videoWin.openDevTools({detach : true});
 
     prefsWindow = new BrowserWindow({width: 500, height: 600,
