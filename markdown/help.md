@@ -93,8 +93,10 @@ This version of CowLog is developed using HTML5 and Javascript using the
 
 The program uses the following components:
 
+* [WebChimera.js](https://github.com/RSATom/WebChimera.js)
 * [jQuery](https://jquery.com/)
 * [Bootstrap](http://getbootstrap.com/)
+* [VLC player](http://videolan.org)
 
 The development is hosted on Github
 [https://github.com/mpastell/CowLog](https://github.com/mpastell/CowLog)
