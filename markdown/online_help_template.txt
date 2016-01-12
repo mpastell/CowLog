@@ -1,0 +1,7 @@
+---
+title: CowLog 3 manual
+---
+
+<h4>Table of contents</h4>
+$toc$
+$body$

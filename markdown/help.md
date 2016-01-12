@@ -1,6 +1,6 @@
 % CowLog help
 % Matti Pastell
-% September 1, 2015
+% January 12, 2016
 
 # Setting up a project
 
@@ -42,6 +42,17 @@ If there are no modifiers the result format has three columns:
 If modifiers are used there are result format will be slightly
 different: The first column will contain the time and the following
 columns contains the behavioral codes followed by potential modifiers.
+
+# Built-in keyboard shortcuts
+
+CowLog has the following keyboard shortcuts, that can be used when the coding window has focus:
+
+`Ctrl+P` toggle play/pause
+
+<code><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></code> Seek backward in video
+
+<code><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></code> Seek forward in video
+
 
 # Analysis
 
