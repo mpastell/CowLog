@@ -1,7 +1,7 @@
 {
   "name"    : "CowLog",
   "version" : "3.0.0",
-  "license" : "GPL",
+  "license" : "GPL-2.0",
   "author" : "Matti Pastell <matti@cowlog.org>",
   "repository": {
     "type": "git",

@@ -24,7 +24,11 @@ Then you can run the application using:
 
 ```
 git clone https://github.com/mpastell/CowLog.git
+cd CowLog
 electron CowLog
 ```
+
+You will need to add compiled [WebChimera.js](https://github.com/RSATom/WebChimera.js)
+to `node_modules` to use VLC support. 
 
 If you want to modify the source I suggest you read the Electron documentation first.
