@@ -253,7 +253,7 @@ app.on('ready', function() {
         exitWindow(videoWin);
         exitWindow(prefsWindow);
         exitWindow(subjectWindow);
-        exitWindow(aboutWindow);
+        //exitWindow(aboutWindow);
         exitWindow(helpWindow);
 
         // Dereference the window object, usually you would store windows
