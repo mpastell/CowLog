@@ -2,5 +2,5 @@
 *.dll
 *.exe
 plugins/
-node_modules/webchimera.js/build
+node_modules/webchimera.js/Release
 .DS_Store
