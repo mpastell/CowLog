@@ -239,26 +239,26 @@ app.on('ready', function() {
 
     function exitWindow(window)
     {
-      if (window !== null)
-      {
+      try {
         window.close();
         window = null;
       }
+      catch (e)
+      {
+        console.log(e);
+      }
     }
 
-    // Emitted when the window is closed.
+    // Emitted when the main window is closed.
     mainWindow.on('closed', function() {
         exiting = true;
 
         exitWindow(videoWin);
         exitWindow(prefsWindow);
         exitWindow(subjectWindow);
-        //exitWindow(aboutWindow);
+        exitWindow(aboutWindow);
         exitWindow(helpWindow);
 
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
         mainWindow = null;
 
     });
