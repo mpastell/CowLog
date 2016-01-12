@@ -1,8 +1,8 @@
-var app = require('app');  // Module to control application life.
-var ipc = require('ipc');
-var dialog = require('dialog');
+var app = require('electron').app;
+const ipc = require('electron').ipcMain;
+var dialog = require('electron').dialog;
+var BrowserWindow = require('electron').BrowserWindow;
 var fs = require('fs');
-var BrowserWindow = require('browser-window');  // Module to create native browser window.
 
 //Set plugin path for VLC player
 //See: https://github.com/RSATom/WebChimera.js/wiki/Electron-v0.36.x-compatibility-issue-on-Windows
@@ -43,7 +43,7 @@ app.on('ready', function() {
     mainWindow = new BrowserWindow({width: 400, height: 850,
             title : "CowLog",
             icon: __dirname + '/almod.png'});
-    mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
+    mainWindow.loadURL('file://' + __dirname + '/html/index.html');
     //mainWindow.openDevTools();
 
     videoWin =  new BrowserWindow({ width: 600, height: 600,
@@ -57,12 +57,12 @@ app.on('ready', function() {
     try
     {
       var wcjs = require("webchimera.js");
-      videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
+      videoWin.loadURL('file://' + __dirname + '/html/videowindow_wcjs.html');
     } catch(e)
     {
         console.log('ERROR loading webchimera.js module\n', e);
         console.log('Using HTML5 player');
-        videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
+        videoWin.loadURL('file://' + __dirname + '/html/videowindow_html5.html');
     }
 
     //videoWin.openDevTools({detach : true});
@@ -71,7 +71,7 @@ app.on('ready', function() {
         title : "Project preferences",
         icon: __dirname + '/almod.png',
         show : false});
-    prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_window.html');
+    prefsWindow.loadURL('file://' + __dirname + '/html/prefs_window.html');
     //prefsWindow.openDevTools({detach : true});
 
     //For development quick access
@@ -79,7 +79,7 @@ app.on('ready', function() {
     //    "auto-hide-menu-bar" : true,
     //    icon: __dirname + '/almod.png',
     //    show : true});
-    //subjectWindow.loadUrl('file://' + __dirname + '/subject_window.html');
+    //subjectWindow.loadURL('file://' + __dirname + '/subject_window.html');
     //subjectWindow.openDevTools();
 
     //Control player in videowindow
@@ -120,10 +120,10 @@ app.on('ready', function() {
 
         if (projSettings.videoplayer === "vlc")
         {
-            videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
+            videoWin.loadURL('file://' + __dirname + '/html/videowindow_wcjs.html');
         }
         else {
-            videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
+            videoWin.loadURL('file://' + __dirname + '/html/videowindow_html5.html');
         }
 
         mainWindow.webContents.send('project-settings', arg);
@@ -135,7 +135,7 @@ app.on('ready', function() {
         {
             case "prefs":
                 //Clear form by reloading
-                prefsWindow.loadUrl('file://' + __dirname + '/html/prefs_window.html');
+                prefsWindow.loadURL('file://' + __dirname + '/html/prefs_window.html');
                 prefsWindow.show();
                 break;
             case "subject":
@@ -144,7 +144,7 @@ app.on('ready', function() {
                     "auto-hide-menu-bar" : true,
                     "title" : "New subject",
                     show : true});
-                subjectWindow.loadUrl('file://' + __dirname + '/html/subject_window.html');
+                subjectWindow.loadURL('file://' + __dirname + '/html/subject_window.html');
                 break;
             case "about":
                 aboutWindow = new BrowserWindow(
@@ -152,7 +152,7 @@ app.on('ready', function() {
                     "auto-hide-menu-bar" : true,
                     "title" : "About CowLog",
                     icon: __dirname + '/almod.png'});
-                aboutWindow.loadUrl('file://' + __dirname + '/html/about.html');
+                aboutWindow.loadURL('file://' + __dirname + '/html/about.html');
                 break;
             case "help":
                 helpWindow = new BrowserWindow(
@@ -160,7 +160,7 @@ app.on('ready', function() {
                     "auto-hide-menu-bar" : true,
                     title : "CowLog help",
                     icon: __dirname + '/almod.png'});
-                 helpWindow.loadUrl('file://' + __dirname + '/html/help.html')
+                 helpWindow.loadURL('file://' + __dirname + '/html/help.html')
             default:
                 break;
         }
@@ -193,10 +193,10 @@ app.on('ready', function() {
 
         if (projSettings.videoplayer === "vlc")
         {
-            videoWin.loadUrl('file://' + __dirname + '/html/videowindow_wcjs.html');
+            videoWin.loadURL('file://' + __dirname + '/html/videowindow_wcjs.html');
         }
         else {
-            videoWin.loadUrl('file://' + __dirname + '/html/videowindow_html5.html');
+            videoWin.loadURL('file://' + __dirname + '/html/videowindow_html5.html');
         }
 
         mainWindow.webContents.send('project-settings', projSettings);
@@ -247,7 +247,10 @@ app.on('ready', function() {
     function exitWindow(window)
     {
       try {
-        window.close();
+        if (window !== null)
+        {
+          window.close();
+        }
         window = null;
       }
       catch (e)
@@ -265,7 +268,6 @@ app.on('ready', function() {
         exitWindow(subjectWindow);
         exitWindow(aboutWindow);
         exitWindow(helpWindow);
-
         mainWindow = null;
 
     });
