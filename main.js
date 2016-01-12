@@ -4,6 +4,13 @@ var dialog = require('dialog');
 var fs = require('fs');
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
 
+//Set plugin path for VLC player
+//See: https://github.com/RSATom/WebChimera.js/wiki/Electron-v0.36.x-compatibility-issue-on-Windows
+if (process.platform === 'win32')
+{
+  process.env['VLC_PLUGIN_PATH'] = __dirname + "/node_modules/webchimera.js/Release/plugins";
+}
+
 // Report crashes to our server.
 //require('crash-reporter').start();
 
