@@ -15,8 +15,8 @@
 <li><a href="#coding-and-saving">Coding and saving</a></li>
 <li><a href="#built-in-keyboard-shortcuts">Built-in keyboard shortcuts</a></li>
 <li><a href="#analysis">Analysis</a></li>
-<li><a href="#supported-video-formats">Supported video formats</a></li>
-<li><a href="#converting-videos-for-suitable-codecs">Converting videos for suitable codecs:</a></li>
+<li><a href="#video-players-and-supported-video-formats">Video players and supported video formats</a></li>
+<li><a href="#converting-videos-to-suitable-codecs">Converting videos to suitable codecs</a></li>
 <li><a href="#citing-cowlog">Citing CowLog</a></li>
 <li><a href="#license">License</a></li>
 <li><a href="#bug-reports">Bug reports</a></li>
@@ -46,16 +46,19 @@
 <p><code><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></code> Seek forward in video</p>
 <h4 id="analysis">Analysis</h4>
 <p>It is up to you to analyse your code. We usually use custom R scripts. The <code>Animal</code>-package mentioned in our paper is not currently available for this version of CowLog. I haven’t had the time to maintain it.</p>
-<h4 id="supported-video-formats">Supported video formats</h4>
-<p>This version of CowLog uses HTML5-video player to play the videos. This means that the program supports the following formats:</p>
+<h4 id="video-players-and-supported-video-formats">Video players and supported video formats</h4>
+<p>CowLog 3 can use HTML5-video player or <a href="http://videolan.org">VLC</a> player to play the videos. You can set the used player in the project preferences. VLC player is packaged is Windows and OS X version, but you need to install it separately on Linux.</p>
+<p>I recommend that you try both players in the start of the new project to see which works better with your video codec.</p>
+<p><strong>HTML5 player</strong> supports the following formats:</p>
 <ul>
 <li>MP4 H.264</li>
 <li>WebM</li>
 <li>Ogg Theora Vorbis</li>
 </ul>
 <p>See <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats" class="uri">https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats</a> for more info.</p>
-<h4 id="converting-videos-for-suitable-codecs">Converting videos for suitable codecs:</h4>
-<p>You can use the following programs to convert video to compatible format:</p>
+<p><strong>VLC player</strong> supported formats are listed on VLC website: <a href="http://www.videolan.org/vlc/features.php?cat=video" class="uri">http://www.videolan.org/vlc/features.php?cat=video</a>. If you can play your video using the VLC player it should work with CowLog.</p>
+<h4 id="converting-videos-to-suitable-codecs">Converting videos to suitable codecs</h4>
+<p>If your codec does not work well (this most often occurs with .wmv files) you can use e.g. one the following programs to convert video to compatible format:</p>
 <ul>
 <li><a href="http://handbrake.fr/">Handbrake</a> convert to MP4 for Chrome.</li>
 <li><a href="http://www.mirovideoconverter.com/">MiroVideoConverter</a> convert to MP4 (Chrome), and Ogg or VP8 for Chrome of Firefox.</li>
@@ -77,7 +80,6 @@
 <li><a href="http://videolan.org">VLC player</a></li>
 </ul>
 <p>The development is hosted on Github <a href="https://github.com/mpastell/CowLog" class="uri">https://github.com/mpastell/CowLog</a> Contributors are welcome!</p>
-<p><a href="http://cowlog.org">CowLog</a> by Matti Pastell.</p>
 
 </div>
 </div>
