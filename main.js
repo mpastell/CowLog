@@ -49,6 +49,7 @@ app.on('ready', function() {
     videoWin =  new BrowserWindow({ width: 600, height: 600,
         title : "CowLog video",
         "auto-hide-menu-bar" : true,
+        icon: __dirname + '/almod.png',
         x :100, y :100,
         show : false
     });
