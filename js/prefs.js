@@ -1,4 +1,5 @@
-var ipc = require('ipc');
+const ipc = require('electron').ipcRenderer;
+//var ipc = require('ipc');
 var remote = require('remote');
 var dialog = remote.require('dialog');
 var fs = remote.require('fs');
@@ -7,7 +8,7 @@ var projSettings = null;
 
 function useModifiers()
 {
-    return($("#useModifiers").attr("checked") === "checked");
+    return($("#useModifiers").prop("checked"));
 }
 
 //Make input boxes for classes
@@ -202,8 +203,9 @@ function saveCodes()
 
 }
 
-ipc.on("project-settings", function(settings)
+ipc.on("project-settings", function(event, settings)
 {
+    console.log("Event");
     loadSettings(settings);
 });
 
