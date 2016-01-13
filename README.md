@@ -29,6 +29,14 @@ electron CowLog
 ```
 
 You will need to add compiled [WebChimera.js](https://github.com/RSATom/WebChimera.js)
-to `node_modules` to use VLC support. 
+to `node_modules` to use VLC support.
 
 If you want to modify the source I suggest you read the Electron documentation first.
+
+## Tools
+
+The following tools are used to build the release binaries:
+
+* [electron-packager](https://github.com/maxogden/electron-packager) to make binary build for all platforms.
+* [node-appdmg](https://github.com/LinusU/node-appdmg) to package OS X release.
+* [Inno Setup](http://www.jrsoftware.org/isinfo.php) to make windows installer.

@@ -5,3 +5,4 @@ plugins/
 node_modules/webchimera.js/Release
 .DS_Store
 node_modules/webchimera.js/node_modules/.bin/
+node_modules/webchimera.js/build/
