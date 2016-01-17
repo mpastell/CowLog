@@ -188,6 +188,8 @@ app.on('ready', function() {
                 [{name : "CowLog project *.json", extensions : ["json"]}]
         });
 
+      if (path)
+      {
         var text = fs.readFileSync(path[0], encoding="utf-8");
 
         projSettings = JSON.parse(text);
@@ -201,6 +203,7 @@ app.on('ready', function() {
         }
 
         mainWindow.webContents.send('project-settings', projSettings);
+      }
         //prefsWindow.webContents.send('project-settings', projSettings);
     });
 
@@ -211,12 +214,15 @@ app.on('ready', function() {
                 [{name : "CowLog project *.json", extensions : ["json"]}]
         });
 
-        var text = fs.readFileSync(path[0], encoding="utf-8");
+        if (path)
+        {
+          var text = fs.readFileSync(path[0], encoding="utf-8");
+          var projSettings = JSON.parse(text);
+          prefsWindow.webContents.send('project-settings', projSettings);
+          prefsWindow.show();
+        }
 
-        var projSettings = JSON.parse(text);
-        prefsWindow.webContents.send('project-settings', projSettings);
-        prefsWindow.show();
-    });
+      });
 
     //Send messages to main window
     ipc.on('main', function(event, arg) {
