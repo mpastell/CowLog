@@ -239,11 +239,10 @@ app.on('ready', function() {
         if (!exiting)
         {
             e.preventDefault();
+            videoWin.reload();
             videoWin.hide();
         }
     });
-
-
 
     function exitWindow(window)
     {
