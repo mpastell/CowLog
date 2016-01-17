@@ -44,7 +44,7 @@ app.on('ready', function() {
             title : "CowLog",
             icon: __dirname + '/almod.png'});
     mainWindow.loadURL('file://' + __dirname + '/html/index.html');
-    //mainWindow.openDevTools();
+    //mainWindow.openDevTools({detach : true});
 
     videoWin =  new BrowserWindow({ width: 600, height: 600,
         title : "CowLog video",

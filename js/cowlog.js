@@ -20,7 +20,7 @@ var currentVideo = {
 };
 
 //References to controls;
-var controls = {};
+var controls = {sliding : false};
 
 //Globals
 var projSettings = null; //An object that contains the settings of current project
@@ -37,25 +37,13 @@ $(document).ready(function(){
     controls.slider = $("#timeSlider").slider({
         stop : function(event, ui) {
             videoSetTime(ui.value);
-            //Play again if video wasn't paused on start
-            if (!currentVideo.pausedOnSlideStart)
-            {
-                videoPlay();
-            }
-            //$("#onslide").hide();
+            controls.sliding = false;
         },
         slide : function(event, ui) {
-            //$("#onslide").show()
             controls.timeindicator.html(ui.value);
-            //controls.timer = clearInterval(controls.timer);
         },
         start : function(event, ui) {
-            currentVideo.pausedOnSlideStart = videoarray[0].paused;
-            //Pause during sliding
-            if (!currentVideo.pausedOnSlideStart)
-            {
-                videoPause();
-            }
+            controls.sliding = true;
         }
     });
     controls.timeindicator = $("#currentTime");
@@ -217,7 +205,10 @@ ipc.on("metadata", function(metadata){
 
 //Receive video time for slider
 ipc.on("timer", function(time){
-    controls.slider.slider( "option", "value", time);
+    if (!controls.sliding)
+    {
+      controls.slider.slider( "option", "value", time);
+    }
     controls.timeindicator.html(time);
 });
 
