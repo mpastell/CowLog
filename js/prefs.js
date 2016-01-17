@@ -6,6 +6,24 @@ var fs = remote.require('fs');
 
 var projSettings = null;
 
+$(document).ready(function(){
+
+  $('#useModifiers').change(function(){
+    if (useModifiers())
+    {
+      modHtml = "<h4>Type in behaviors with modifiers as comma separated list</h4>";
+      modHtml += "<label>Behaviors with modifiers:</label>" +
+      "<input type='text' class='form-control' id='modifiedClasses' /></fieldset>";
+      $("#modifierInputs").html(modHtml);
+    }
+    else {
+      $("#modifierInputs").html("");
+    }
+
+  });
+
+});
+
 function useModifiers()
 {
     return($("#useModifiers").prop("checked"));
@@ -31,7 +49,7 @@ function classBoxes()
         "<input type='text' class='form-control' id='modifiedClasses' /></fieldset>";
     }
 
-    $("#modifierInputs").html(modHtml);
+    //$("#modifierInputs").html(modHtml);
 
     var buttonHtml = "<p><button class='btn btn-default' onclick='makeKeyInputs()' id='keyInputButton'>Add keyboard shortcuts</button></p>";
 
@@ -257,6 +275,8 @@ function loadSettings(config)
     	}
     }
 }
+
+
 
 
 function chooseDatadir()
