@@ -15,6 +15,7 @@ function videoerror()
 }
 
 openVideos = function(files){
+  videoarray = [];
   var n = files.length;
   $("#videocontainer").empty();
   $("#droplist").empty();
@@ -123,7 +124,9 @@ function setVideoSize()
 function videoPlay()
 {
     videoarray.forEach(function(video){
-	video.play();
+	     video.play();
+       video.volume(70);
+       video.mute(false);
     });
     //Set the timer for updating slider
     controls.timer = setInterval(

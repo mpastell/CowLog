@@ -7,6 +7,7 @@ function videoerror()
 }
 
 openVideos = function(files){
+  videoarray = [];
   var n = files.length;
   $("#videocontainer").empty();
   $("#droplist").empty();
