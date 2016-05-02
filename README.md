@@ -5,6 +5,11 @@
 
 This repository contains the new desktop branch CowLog 3 of the software based on HTML5 and Javascript using  [Electron](http://electron.atom.io/).
 
+The use and architecture of the software is described:
+
+  *Pastell, M., (2016). CowLog – Cross-Platform Application for Coding Behaviours from Video. Journal of Open Research Software. 4(1), p.e15. DOI: http://doi.org/10.5334/jors.113*
+
+
 
 The program uses the following frameworks and libraries:
 
